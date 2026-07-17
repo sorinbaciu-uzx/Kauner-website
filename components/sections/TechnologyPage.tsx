@@ -22,11 +22,13 @@ import { StatBand, type Stat } from "@/components/ui/StatBand";
 import { CountUp } from "@/components/ui/CountUp";
 import { KaunerNote } from "@/components/ui/KaunerNote";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/Reveal";
+import { TECH_FAQ } from "@/lib/tech-faq";
 
 /*
- * /tehnologie per KAUNER_Technology_Page_Prompt v1.1.
- * IMPLEMENTED with final RO copy (verbatim §4): 4.1 Hero, 4.2 Teza, 4.2b De ce Han's.
- * Remaining sections (03–12) are stubs (title + MediaPlaceholder) awaiting copy.
+ * /tehnologie per KAUNER_Technology_Page_Prompt v1.1 — full RO copy (verbatim §4)
+ * across all sections, animations A1–A9, and the §5B SEO layer: one H1 + semantic
+ * H2s (punchy lines demoted to <Deck>), alt-text on all media, internal links to
+ * the equipment pages, and a visible FAQ (mirrored in FAQPage schema in page.tsx).
  * Light/dark rhythm §2.3 — dark only via <DarkMoment>. Blue budget §2.1.
  * i18n: strings inline for now; the `tech.*` key tree lands with the EN pass (§7).
  */
@@ -126,6 +128,49 @@ function MaterialPanel({
   );
 }
 
+/** The "punchy" headline demoted to a deck under the semantic H2 (§5B.2). */
+function Deck({ children }: { children: ReactNode }) {
+  return (
+    <Reveal delay={0.1} className="mt-4">
+      <p className="max-w-[54ch] font-display-600 text-h4 text-ink">{children}</p>
+    </Reveal>
+  );
+}
+
+/** Discreet keyword-rich internal links to the equipment pages (§5B.5). */
+function RelatedLinks({
+  label = "Vezi echipamentele",
+  links,
+}: {
+  label?: string;
+  links: { href: string; text: string }[];
+}) {
+  return (
+    <div className="mt-10 flex flex-wrap items-center gap-x-2 gap-y-2 border-t border-line pt-6">
+      <span className="mono-label text-steel-500">{label}:</span>
+      {links.map((l, i) => (
+        <span key={l.href} className="text-sm">
+          <Link
+            href={l.href}
+            className="font-medium text-ink underline decoration-line underline-offset-4 transition-colors hover:text-blue-600 hover:decoration-blue-600"
+          >
+            {l.text}
+          </Link>
+          {i < links.length - 1 && (
+            <span className="ml-2 text-steel-400" aria-hidden>·</span>
+          )}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+const EQUIP_LINKS = [
+  { href: "/echipamente#debitare-tabla", text: "Debitare laser tablă" },
+  { href: "/echipamente#debitare-teava", text: "Debitare laser țeavă & profile" },
+  { href: "/echipamente#debitare-3d", text: "Debitare laser 3D" },
+];
+
 export function TechnologyPage() {
   return (
     <div className="bg-paper">
@@ -180,10 +225,11 @@ export function TechnologyPage() {
             </div>
           </Reveal>
           <Reveal delay={0.06} className="mt-5">
-            <h2 className="max-w-[20ch] font-display text-h2 text-ink">
-              Un singur lanț. Un singur responsabil.
+            <h2 className="max-w-[30ch] font-display text-h2 text-ink">
+              Sursă laser, cap de tăiere și CNC — de la același producător
             </h2>
           </Reveal>
+          <Deck>Un singur lanț. Un singur responsabil.</Deck>
           <Reveal delay={0.1} className="mt-6">
             <p className="max-w-[74ch] text-body-l text-ink-soft">
               Majoritatea utilajelor laser sunt asamblate: sursa vine de la un
@@ -221,7 +267,7 @@ export function TechnologyPage() {
           </Reveal>
           <Reveal delay={0.06} className="mt-5">
             <h2 className="max-w-[24ch] font-display text-h2 text-ink">
-              De ce am ales să construim pe Han&apos;s Laser
+              De ce am ales tehnologia Han&apos;s Laser
             </h2>
           </Reveal>
 
@@ -273,10 +319,11 @@ export function TechnologyPage() {
             </div>
           </Reveal>
           <Reveal delay={0.06} className="mt-5">
-            <h2 className="max-w-[22ch] font-display text-h2 text-ink">
-              De ce fibra taie mai repede și mai eficient.
+            <h2 className="max-w-[26ch] font-display text-h2 text-ink">
+              Cum funcționează un laser cu fibră
             </h2>
           </Reveal>
+          <Deck>De ce fibra taie mai repede și mai eficient.</Deck>
           <Reveal delay={0.1} className="mt-6">
             <p className="max-w-[74ch] text-body-l text-ink-soft">
               Un laser cu fibră nu are oglinzi de aliniat și nici gaz de umplut.
@@ -347,7 +394,7 @@ export function TechnologyPage() {
           </Reveal>
           <Reveal delay={0.06} className="mt-5">
             <h2 className="max-w-[26ch] font-display text-h2 text-ink">
-              Sursa laser — fibră, dezvoltată in-house (Han&apos;s Photonics)
+              Sursa laser cu fibră (Han&apos;s Photonics)
             </h2>
           </Reveal>
 
@@ -423,6 +470,7 @@ export function TechnologyPage() {
                 kind="image"
                 ratio="16 / 9"
                 label="FOTO · conector QBH / capăt de fibră"
+                alt="Conector QBH și capăt de fibră optică pentru sursa laser cu fibră"
               />
             </div>
           </div>
@@ -432,6 +480,8 @@ export function TechnologyPage() {
             grosimile tale reale, punem sursa în funcțiune și o susținem cu service
             local.
           </KaunerNote>
+
+          <RelatedLinks links={EQUIP_LINKS} />
         </div>
       </section>
 
@@ -465,9 +515,10 @@ export function TechnologyPage() {
           </Reveal>
           <Reveal delay={0.06} className="mt-5">
             <h2 className="max-w-[26ch] font-display text-h2 text-ink">
-              Capul de tăiere — 100% design propriu (Han&apos;s Focus)
+              Capul de tăiere laser (Han&apos;s Focus)
             </h2>
           </Reveal>
+          <Deck>100% design propriu.</Deck>
           <Reveal delay={0.1} className="mt-6">
             <p className="max-w-[74ch] text-body-l text-ink-soft">
               Han&apos;s Focus dezvoltă peste 30 de tipuri de capuri, cu sistem
@@ -530,6 +581,8 @@ export function TechnologyPage() {
             configurăm capul potrivit proceselor tale (tablă plană, bizou, piese
             3D) și ținem optica în parametri prin service programat.
           </KaunerNote>
+
+          <RelatedLinks links={EQUIP_LINKS} />
         </div>
       </section>
 
@@ -544,10 +597,11 @@ export function TechnologyPage() {
             </div>
           </Reveal>
           <Reveal delay={0.06} className="mt-5">
-            <h2 className="max-w-[24ch] font-display text-h2 text-ink">
-              Lentilele decid cât timp taie curat mașina.
+            <h2 className="max-w-[28ch] font-display text-h2 text-ink">
+              Optică, lentile și mentenanța mașinii de debitare laser
             </h2>
           </Reveal>
+          <Deck>Lentilele decid cât timp taie curat mașina.</Deck>
 
           {/* Sub-bloc 1 — Efectul de lentilă termică (A5) */}
           <div className="mt-14 grid gap-10 lg:grid-cols-2 lg:items-center">
@@ -611,8 +665,16 @@ export function TechnologyPage() {
             </Reveal>
             <RevealGroup as="ul" className="mt-10 grid gap-6 md:grid-cols-3">
               {[
-                { label: "FOTO · compartiment duze (12 sertare)", alt: undefined as string | undefined },
-                { label: "FOTO · stație de calibrare / inspecție", alt: undefined },
+                {
+                  label: "FOTO · compartiment duze (12 sertare)",
+                  alt: "Compartiment cu 12 sertare de duze pentru capul de tăiere laser" as
+                    | string
+                    | undefined,
+                },
+                {
+                  label: "FOTO · stație de calibrare / inspecție",
+                  alt: "Stație de calibrare automată și inspecție a opticii de debitare laser",
+                },
                 {
                   label: "FOTO · tehnician Kauner la mentenanță",
                   alt: "Tehnician Kauner la mentenanța unei mașini de debitare laser",
@@ -624,6 +686,11 @@ export function TechnologyPage() {
               ))}
             </RevealGroup>
           </div>
+
+          <RelatedLinks
+            label="Vezi și"
+            links={[{ href: "/service", text: "Service & mentenanță" }]}
+          />
         </div>
       </section>
 
@@ -638,8 +705,8 @@ export function TechnologyPage() {
             </div>
           </Reveal>
           <Reveal delay={0.06} className="mt-5">
-            <h2 className="max-w-[24ch] font-display text-h2 text-ink">
-              Sistemul CNC & software (Han&apos;s SMC)
+            <h2 className="max-w-[26ch] font-display text-h2 text-ink">
+              Sistemul CNC și software de debitare laser (Han&apos;s SMC)
             </h2>
           </Reveal>
           <Reveal delay={0.1} className="mt-6">
@@ -665,6 +732,7 @@ export function TechnologyPage() {
                 kind="image"
                 ratio="16 / 10"
                 label="MOCKUP UI · interfața CNC + nesting"
+                alt="Interfața sistemului CNC și nesting pentru debitare laser"
               />
             </MonitorFrame>
           </Reveal>
@@ -748,10 +816,11 @@ export function TechnologyPage() {
             </div>
           </Reveal>
           <Reveal delay={0.06} className="mt-5">
-            <h2 className="max-w-[24ch] font-display text-h2 text-ink">
-              De la fascicul la muchie: procesul contează.
+            <h2 className="max-w-[28ch] font-display text-h2 text-ink">
+              Materiale și gaze la debitarea laser (oțel, inox, aluminiu)
             </h2>
           </Reveal>
+          <Deck>De la fascicul la muchie: procesul contează.</Deck>
           <Reveal delay={0.1} className="mt-6">
             <p className="max-w-[74ch] text-body-l text-ink-soft">
               Calitatea muchiei nu vine doar din laser, ci din gazul de asistență
@@ -849,6 +918,8 @@ export function TechnologyPage() {
               metalice, auto, mobilier, utilaj greu și energie nouă.
             </p>
           </Reveal>
+
+          <RelatedLinks links={EQUIP_LINKS} />
         </div>
       </section>
 
@@ -867,9 +938,9 @@ export function TechnologyPage() {
           <span className="block h-px w-9 bg-blue-300/50" aria-hidden />
           AUTOMATIZARE · FMS · MES · HIOT
         </div>
-        <h2 className="mt-6 max-w-[18ch] font-display text-display text-white">
+        <p className="mt-6 max-w-[18ch] font-display text-display text-white">
           Producție fără operator, în tura a treia.
-        </h2>
+        </p>
         <p className="mt-6 max-w-[62ch] text-body-l text-white/80">
           Turn de depozitare, roboți de încărcare/descărcare, cărucioare de schimb
           și dispecerizare FMS+PLC+CNC — linia se conduce singură.
@@ -880,6 +951,11 @@ export function TechnologyPage() {
       <section className="cv-section border-t border-line bg-paper">
         <div className="container-kauner py-section-sm md:py-section">
           <Reveal>
+            <h2 className="max-w-[28ch] font-display text-h2 text-ink">
+              Automatizare pentru debitare laser: FMS, MES, fabrică inteligentă
+            </h2>
+          </Reveal>
+          <Reveal delay={0.06} className="mt-6">
             <p className="max-w-[76ch] text-body-l text-ink-soft">
               Peste utilaj, Han&apos;s integrează automatizarea completă: turn de
               depozitare tablă, roboți de încărcare/descărcare, cărucioare de
@@ -929,6 +1005,12 @@ export function TechnologyPage() {
             dimensionăm automatizarea la volumul tău real și o integrăm în fluxul
             existent, fără să-ți oprim producția.
           </KaunerNote>
+
+          <RelatedLinks
+            links={[
+              { href: "/echipamente#automatizare", text: "Automatizare & FMS" },
+            ]}
+          />
         </div>
       </section>
 
@@ -944,9 +1026,10 @@ export function TechnologyPage() {
           </Reveal>
           <Reveal delay={0.06} className="mt-5">
             <h2 className="max-w-[24ch] font-display text-h2 text-ink">
-              Fabricația: unde precizia devine repetabilă.
+              Fabricație și control de calitate
             </h2>
           </Reveal>
+          <Deck>Fabricația: unde precizia devine repetabilă.</Deck>
           <Reveal delay={0.1} className="mt-6">
             <p className="max-w-[76ch] text-body-l text-ink-soft">
               Centrul de fabricație Han&apos;s a investit aproape 60 de milioane
@@ -977,12 +1060,21 @@ export function TechnologyPage() {
           {/* foto echipamente premium de fabricație */}
           <RevealGroup as="ul" className="mt-12 grid gap-6 md:grid-cols-3">
             {[
-              "FOTO · centru de prelucrare 5 axe DMG",
-              "FOTO · linie orizontală automată MAZAK",
-              "FOTO · mașină de măsurat în coordonate ZEISS",
-            ].map((l) => (
-              <RevealItem as="li" key={l}>
-                <MediaPlaceholder kind="image" ratio="4 / 3" label={l} />
+              {
+                label: "FOTO · centru de prelucrare 5 axe DMG",
+                alt: "Centru de prelucrare pe 5 axe din fabricația Han's Laser",
+              },
+              {
+                label: "FOTO · linie orizontală automată MAZAK",
+                alt: "Linie orizontală automată de prelucrare din fabricația Han's Laser",
+              },
+              {
+                label: "FOTO · mașină de măsurat în coordonate ZEISS",
+                alt: "Mașină de măsurat în coordonate pentru controlul calității",
+              },
+            ].map((f) => (
+              <RevealItem as="li" key={f.label}>
+                <MediaPlaceholder kind="image" ratio="4 / 3" label={f.label} alt={f.alt} />
               </RevealItem>
             ))}
           </RevealGroup>
@@ -1018,10 +1110,11 @@ export function TechnologyPage() {
             </div>
           </Reveal>
           <Reveal delay={0.06} className="mt-5">
-            <h2 className="max-w-[22ch] font-display text-h2 text-ink">
-              Tehnologie globală, prezență locală.
+            <h2 className="max-w-[26ch] font-display text-h2 text-ink">
+              Debitare laser cu tehnologie Han&apos;s, service în România
             </h2>
           </Reveal>
+          <Deck>Tehnologie globală, prezență locală.</Deck>
           <Reveal delay={0.1} className="mt-6">
             <p className="max-w-[76ch] text-body-l text-ink-soft">
               Han&apos;s Laser acoperă întreg ciclul — cercetare, proiectare,
@@ -1054,6 +1147,34 @@ export function TechnologyPage() {
           </div>
 
           <p className="mono-label mt-10 text-blue-600">Integrator Han&apos;s Laser în România.</p>
+        </div>
+      </section>
+
+      {/* SEO — ÎNTREBĂRI FRECVENTE (vizibil + FAQPage §5B.6) ————————————— */}
+      <section id="intrebari-frecvente" className="cv-section border-t border-line bg-paper">
+        <div className="container-kauner py-section-sm md:py-section">
+          <Reveal>
+            <div className="mono-label flex items-center gap-3 text-steel-500">
+              <span className="block h-px w-9 bg-blue-600/50" aria-hidden />
+              — ÎNTREBĂRI FRECVENTE
+            </div>
+          </Reveal>
+          <Reveal delay={0.06} className="mt-5">
+            <h2 className="max-w-[24ch] font-display text-h2 text-ink">
+              Întrebări frecvente despre debitarea laser
+            </h2>
+          </Reveal>
+          <RevealGroup
+            as="ul"
+            className="mt-10 max-w-[82ch] divide-y divide-line border-t border-line"
+          >
+            {TECH_FAQ.map((f) => (
+              <RevealItem as="li" key={f.q} className="py-6">
+                <h3 className="font-display-600 text-h4 text-ink">{f.q}</h3>
+                <p className="mt-3 text-[0.975rem] leading-relaxed text-ink-soft">{f.a}</p>
+              </RevealItem>
+            ))}
+          </RevealGroup>
         </div>
       </section>
 

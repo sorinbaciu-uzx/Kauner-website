@@ -225,6 +225,13 @@ export function ModelDetail({ slug }: Props) {
           <Button href="/contact" variant="ghost-light" withChevron>
             {m.ctaButton}
           </Button>
+          <Link
+            href="/tehnologie"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-steel-300 outline-none transition-colors hover:text-white focus-visible:text-white"
+          >
+            {m.backToTech}
+            <ChevronRight className="h-4 w-4" strokeWidth={2.25} aria-hidden />
+          </Link>
         </div>
       </section>
     </div>
