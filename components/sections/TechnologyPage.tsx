@@ -13,6 +13,8 @@ import { BppFocusSlider } from "@/components/ui/BppFocusSlider";
 import { OpticalStackExploded } from "@/components/ui/OpticalStackExploded";
 import { ThermalLensAnim } from "@/components/ui/ThermalLensAnim";
 import { CoverSlideAnim } from "@/components/ui/CoverSlideAnim";
+import { EtherCatDiagram } from "@/components/ui/EtherCatDiagram";
+import { Tabs } from "@/components/ui/Tabs";
 import { KaunerNote } from "@/components/ui/KaunerNote";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/Reveal";
 
@@ -113,6 +115,43 @@ const WHY_CARDS = [
 /** Subtle key-figure emphasis (weight, not blue — keeps §2.1 budget). */
 function Fig({ children }: { children: ReactNode }) {
   return <span className="tnum font-medium text-ink">{children}</span>;
+}
+
+/** Discrete monitor bezel around the UI showcase (§4.7). */
+function MonitorFrame({ children }: { children: ReactNode }) {
+  return (
+    <div className="mx-auto max-w-4xl">
+      <div className="rounded-md border border-line bg-paper-2 p-2.5">
+        <div className="mb-2 flex gap-1.5 px-1" aria-hidden>
+          <span className="h-2 w-2 rounded-full bg-mist-200" />
+          <span className="h-2 w-2 rounded-full bg-mist-200" />
+          <span className="h-2 w-2 rounded-full bg-mist-200" />
+        </div>
+        <div className="overflow-hidden rounded-sm">{children}</div>
+      </div>
+      {/* stand */}
+      <div className="mx-auto h-4 w-24 bg-gradient-to-b from-line to-transparent" aria-hidden />
+      <div className="mx-auto h-1 w-40 rounded-full bg-line" aria-hidden />
+    </div>
+  );
+}
+
+/** One material→gas tab panel (§4.8): macro edge photo + process text. */
+function MaterialPanel({
+  foto,
+  alt,
+  children,
+}: {
+  foto: string;
+  alt?: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
+      <MediaPlaceholder kind="image" ratio="4 / 3" label={foto} alt={alt} />
+      <p className="max-w-[60ch] text-body-l text-ink-soft">{children}</p>
+    </div>
+  );
 }
 
 export function TechnologyPage() {
@@ -616,19 +655,230 @@ export function TechnologyPage() {
         </div>
       </section>
 
-      {/* 07 — CNC & SOFTWARE (light) — stub ————————————————————————————— */}
-      <Chapter id="cnc-software" index="07" kicker="— SUBSISTEM 03" title="Sistemul CNC și software">
-        <MediaPlaceholder kind="image" ratio="16 / 9" label="MOCKUP UI + DIAGRAMĂ EtherCAT" />
-      </Chapter>
+      {/* 4.7 — CNC & SOFTWARE — Han's SMC (light) ———————————————————————— */}
+      <section id="cnc-software" className="cv-section border-t border-line bg-paper">
+        <div className="container-kauner py-section-sm md:py-section">
+          <Reveal>
+            <div className="mono-label flex items-center gap-3 text-steel-500">
+              <span className="tnum text-blue-600">07</span>
+              <span className="block h-px w-9 bg-blue-600/50" aria-hidden />
+              — SUBSISTEM 03
+            </div>
+          </Reveal>
+          <Reveal delay={0.06} className="mt-5">
+            <h2 className="max-w-[24ch] font-display text-h2 text-ink">
+              Sistemul CNC & software (Han&apos;s SMC)
+            </h2>
+          </Reveal>
+          <Reveal delay={0.1} className="mt-6">
+            <p className="max-w-[74ch] text-body-l text-ink-soft">
+              Han&apos;s SMC dezvoltă sistemul de control complet: controlerul CNC
+              (seria 801/901, pe platformă Windows industrial), software-ul,
+              sistemele de viziune și controlul de înălțime. Arhitectura e
+              deschisă, pe bază de PC, și rulează pe magistrală EtherCAT cu
+              transfer digital — imunitate mai bună la interferențe decât
+              semnalele analogice sau pe puls — cu un ciclu de scanare la scară de
+              microsecunde, care înseamnă contururi mici tăiate curat. Pe
+              platformele de mare dinamică, controlul Han&apos;s e cuplat cu
+              servo-drivere și motoare Bosch Rexroth, pentru accelerații mari și
+              precizie de poziționare. Sistemul suportă conectivitate IIoT și
+              diagnoză la distanță prin rețea.
+            </p>
+          </Reveal>
 
-      {/* 08 — MATERIALE & PROCES (light) — stub ————————————————————————— */}
-      <Chapter id="materiale-proces" index="08" kicker="— PROCES" title="Materiale și gaze de tăiere">
-        <MediaPlaceholder
-          kind="image"
-          ratio="16 / 9"
-          label="MACRO MUCHII + selector material → gaz"
-        />
-      </Chapter>
+          {/* showcase UI — mockup într-un cadru discret de monitor */}
+          <Reveal className="mt-12">
+            <MonitorFrame>
+              <MediaPlaceholder
+                kind="image"
+                ratio="16 / 10"
+                label="MOCKUP UI · interfața CNC + nesting"
+              />
+            </MonitorFrame>
+          </Reveal>
+
+          {/* tabs de capabilități */}
+          <div className="mt-14">
+            <Tabs
+              ariaLabel="Capabilități CNC & software"
+              tabs={[
+                {
+                  label: "CAM online",
+                  panel: (
+                    <p className="max-w-[74ch] text-body-l text-ink-soft">
+                      Programezi direct pe mașină, fără să treci pe alt calculator:
+                      editezi programul NC, adaugi micro-punți, ajustezi
+                      intrările/ieșirile, inserezi text de marcare, faci teșiri,
+                      tăiere pe muchie comună, tăiere „din zbor” (flying cut) și
+                      punți de legătură.
+                    </p>
+                  ),
+                },
+                {
+                  label: "Nesting & materiale",
+                  panel: (
+                    <p className="max-w-[74ch] text-body-l text-ink-soft">
+                      Așezarea automată a pieselor optimizează consumul de tablă
+                      (nesting CNCKAD/CypNest) și importă formate uzuale — DXF,
+                      DWG, PLT, AI — compatibil cu ecosistemul CypCut / CypNest.
+                    </p>
+                  ),
+                },
+                {
+                  label: "Planificare producție",
+                  panel: (
+                    <p className="max-w-[74ch] text-body-l text-ink-soft">
+                      Procesare pe loturi din liste de sarcini, procesare simultană
+                      a mai multor piese pe aceeași masă, cu documentație
+                      standardizată pentru trasabilitate.
+                    </p>
+                  ),
+                },
+                {
+                  label: "Arhitectură",
+                  panel: (
+                    <p className="max-w-[74ch] text-body-l text-ink-soft">
+                      Terminalul FMS unifică rutarea proceselor, BOM-ul, modelarea
+                      fabricii, comenzile de producție, planificarea inteligentă și
+                      colectarea de date — pentru producție cu mix mare și volum
+                      mic, pe echipamente multiple.
+                    </p>
+                  ),
+                },
+              ]}
+            />
+          </div>
+
+          {/* diagrama EtherCAT — A7 */}
+          <div className="mt-14">
+            <EtherCatDiagram />
+          </div>
+
+          <p className="mono-label mt-8 text-steel-500">
+            EtherCAT · ciclu µs · Windows IoT · diagnoză la distanță prin WiFi/rețea
+          </p>
+
+          <KaunerNote>
+            te instruim pe CAM online și nesting, ca operatorii tăi să programeze
+            direct pe mașină din prima săptămână.
+          </KaunerNote>
+        </div>
+      </section>
+
+      {/* 4.8 — MATERIALE & PROCES (light) — selector material→gaz ———————— */}
+      <section id="materiale-proces" className="cv-section border-t border-line bg-paper">
+        <div className="container-kauner py-section-sm md:py-section">
+          <Reveal>
+            <div className="mono-label flex items-center gap-3 text-steel-500">
+              <span className="tnum text-blue-600">08</span>
+              <span className="block h-px w-9 bg-blue-600/50" aria-hidden />
+              — PROCES
+            </div>
+          </Reveal>
+          <Reveal delay={0.06} className="mt-5">
+            <h2 className="max-w-[24ch] font-display text-h2 text-ink">
+              De la fascicul la muchie: procesul contează.
+            </h2>
+          </Reveal>
+          <Reveal delay={0.1} className="mt-6">
+            <p className="max-w-[74ch] text-body-l text-ink-soft">
+              Calitatea muchiei nu vine doar din laser, ci din gazul de asistență
+              — jetul coaxial care suflă materialul topit din tăietură și decide
+              atmosfera muchiei. Alegerea corectă echilibrează viteză, aspect și
+              cost.
+            </p>
+          </Reveal>
+
+          {/* selector material → gaz (tabs cu crossfade) */}
+          <div className="mt-12">
+            <Tabs
+              ariaLabel="Material și gaz de asistență"
+              tabs={[
+                {
+                  label: "Oțel carbon",
+                  panel: (
+                    <MaterialPanel
+                      foto="FOTO macro · muchie oțel carbon (O₂)"
+                      alt="Muchie de oțel carbon debitat cu laser și oxigen"
+                    >
+                      Cu oxigen, reacția exotermă adaugă căldură — tăiere mai
+                      rapidă și grosimi mai mari, cu o muchie oxidată care de
+                      obicei se curăță înainte de vopsire. Cu aer sau gaz mixt
+                      (Mix-M), muchia e mult mai curată; oțelul carbon de{" "}
+                      <Fig>25–35 mm</Fig> se taie curat cu aer, iar tehnologia de
+                      gaz mixt împinge tăierea rapidă până spre <Fig>40 mm</Fig>.
+                    </MaterialPanel>
+                  ),
+                },
+                {
+                  label: "Inox",
+                  panel: (
+                    <MaterialPanel
+                      foto="FOTO macro · muchie inox lucioasă (N₂)"
+                      alt="Muchie de inox debitat cu laser și azot, fără oxid"
+                    >
+                      Cu azot (inert), muchia iese lucioasă, fără oxid, gata de
+                      sudură — fără curățare. Azotul de mare presiune (tipic{" "}
+                      <Fig>10–20 bar</Fig> la cap) suflă topitura fără să
+                      reacționeze cu metalul. Puritatea azotului decide direct
+                      calitatea muchiei.
+                    </MaterialPanel>
+                  ),
+                },
+                {
+                  label: "Aluminiu",
+                  panel: (
+                    <MaterialPanel
+                      foto="FOTO macro · muchie aluminiu"
+                      alt="Muchie de aluminiu debitat cu laser"
+                    >
+                      Azotul previne stratul dur de oxid de aluminiu (Al₂O₃),
+                      problematic la sudură. Pe grosimi medii, aerul de mare
+                      presiune poate da chiar o muchie mai bună și viteze mai mari
+                      decât azotul pur.
+                    </MaterialPanel>
+                  ),
+                },
+                {
+                  label: "Cupru/Alamă",
+                  panel: (
+                    <MaterialPanel
+                      foto="FOTO macro · muchie cupru/alamă"
+                      alt="Muchie de cupru și alamă debitate cu laser"
+                    >
+                      Foarte reflectorizante — aici contează izolarea la reflexie
+                      inversă a sursei. Se taie cu azot pentru muchie curată;
+                      procesul cere o sursă care suportă întoarcerea fasciculului
+                      fără risc.
+                    </MaterialPanel>
+                  ),
+                },
+                {
+                  label: "Titan",
+                  panel: (
+                    <MaterialPanel
+                      foto="FOTO macro · muchie titan (argon)"
+                      alt="Muchie de titan debitat cu laser și argon"
+                    >
+                      Cu argon, protecție maximă a muchiei împotriva oxidării,
+                      pentru aplicații exigente.
+                    </MaterialPanel>
+                  ),
+                },
+              ]}
+            />
+          </div>
+
+          {/* sub-context — ce taie Kauner */}
+          <Reveal className="mt-12">
+            <p className="max-w-[80ch] text-[0.95rem] leading-relaxed text-steel-500">
+              Tăiem oțel carbon, inox, aluminiu, cupru, alamă și titan — tablă,
+              țeavă, profile și grinzi H — pentru fabricație de metal, construcții
+              metalice, auto, mobilier, utilaj greu și energie nouă.
+            </p>
+          </Reveal>
+        </div>
+      </section>
 
       {/* 09 — AUTOMATIZARE (dark, cinematic) — stub —————————————————————— */}
       <DarkMoment
