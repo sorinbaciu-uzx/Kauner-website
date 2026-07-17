@@ -1,16 +1,18 @@
 import type { Metadata } from "next";
-import { Technology } from "@/components/sections/Technology";
+import { TechnologyPage } from "@/components/sections/TechnologyPage";
 
+// §5B.3 — meta optimizat pentru „debitare laser cu fibră".
 export const metadata: Metadata = {
-  title: "Tehnologie",
+  title: { absolute: "Tehnologie debitare laser cu fibră | Kauner" },
   description:
-    "Tehnologie laser cu fibră integrată vertical: sursă laser de mare putere, cap de tăiere auto-focus, sistem CNC și automatizare FMS — dezvoltate in-house și integrate de Kauner în România.",
+    "Debitare laser cu fibră pe echipamente Han's Laser: sursă, cap de tăiere și CNC de la același producător. Precizie, fiabilitate și service în România.",
+  alternates: { canonical: "/tehnologie" },
 };
 
 export default function TehnologiePage() {
   return (
     <div className="pt-[72px]">
-      <Technology variant="full" />
+      <TechnologyPage />
     </div>
   );
 }

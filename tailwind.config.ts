@@ -10,7 +10,11 @@ const config: Config = {
     extend: {
       colors: {
         kauner: { blue: "#0D009F" },
-        ink: { DEFAULT: "#0A0A0C", 950: "#0A0A0C" },
+        // §2.1 technology-page tokens (aligned to the existing brand kit).
+        ink: { DEFAULT: "#0B0B0C", soft: "#26262B", 950: "#0B0B0C" },
+        paper: { DEFAULT: "#FFFFFF", 2: "#F5F5F4" },
+        line: { DEFAULT: "#E4E4E2", dark: "rgba(255,255,255,0.14)" },
+        "blue-tint": "rgba(13,0,159,0.06)",
         black: "#000000",
         white: "#FFFFFF",
         blue: {

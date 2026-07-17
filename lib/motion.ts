@@ -33,3 +33,26 @@ export const hairlineDraw: Variants = {
 
 // Shared viewport config for whileInView.
 export const inView = { once: true, amount: 0.25 } as const;
+
+// —— §2.5 Technology-page motion primitives ————————————————————————————————
+// Softer, longer signature reveal used across the /tehnologie chapters.
+export const techEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+// Reveal: opacity 0->1 + translateY 24->0, 600ms.
+export const revealUp: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: techEase },
+  },
+};
+
+// Stagger container for spec rows / cards — 80ms between children.
+export const staggerUp: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.08 } },
+};
+
+// Viewport margin variant: fire a touch before the block is fully in view.
+export const inViewMargin = { once: true, margin: "-12% 0px" } as const;
