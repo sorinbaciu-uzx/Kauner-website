@@ -10,6 +10,9 @@ import { SpecTable } from "@/components/ui/SpecTable";
 import { IntegratedChainDiagram } from "@/components/ui/IntegratedChainDiagram";
 import { FiberSchematic } from "@/components/ui/FiberSchematic";
 import { BppFocusSlider } from "@/components/ui/BppFocusSlider";
+import { OpticalStackExploded } from "@/components/ui/OpticalStackExploded";
+import { ThermalLensAnim } from "@/components/ui/ThermalLensAnim";
+import { CoverSlideAnim } from "@/components/ui/CoverSlideAnim";
 import { KaunerNote } from "@/components/ui/KaunerNote";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/Reveal";
 
@@ -156,7 +159,7 @@ export function TechnologyPage() {
       </DarkMoment>
 
       {/* 4.2 — TEZA: lanț integrat (light) — diagram A1 build-on-scroll ——— */}
-      <section id="lant-integrat" className="cv-section border-t border-line bg-paper">
+      <section id="lant-integrat" className="border-t border-line bg-paper">
         <div className="container-kauner pt-section-sm md:pt-section">
           <Reveal>
             <div className="mono-label flex items-center gap-3 text-steel-500">
@@ -439,28 +442,179 @@ export function TechnologyPage() {
         </p>
       </DarkMoment>
 
-      {/* 05 — CAPUL DE TĂIERE (light) — stub —————————————————————————————— */}
-      <Chapter id="cap-de-taiere" index="05" kicker="— SUBSISTEM 02" title="Capul de tăiere">
-        <MediaPlaceholder
-          kind="image"
-          ratio="16 / 9"
-          label="STIVĂ OPTICĂ „exploded” (pinned) + variante cap"
-        />
-      </Chapter>
+      {/* 4.5 — CAPUL DE TĂIERE — Han's Focus (light) — stiva A4 pinned ——— */}
+      <section id="cap-de-taiere" className="border-t border-line bg-paper">
+        <div className="container-kauner py-section-sm md:py-section">
+          <Reveal>
+            <div className="mono-label flex items-center gap-3 text-steel-500">
+              <span className="tnum text-blue-600">05</span>
+              <span className="block h-px w-9 bg-blue-600/50" aria-hidden />
+              — SUBSISTEM 02
+            </div>
+          </Reveal>
+          <Reveal delay={0.06} className="mt-5">
+            <h2 className="max-w-[26ch] font-display text-h2 text-ink">
+              Capul de tăiere — 100% design propriu (Han&apos;s Focus)
+            </h2>
+          </Reveal>
+          <Reveal delay={0.1} className="mt-6">
+            <p className="max-w-[74ch] text-body-l text-ink-soft">
+              Han&apos;s Focus dezvoltă peste 30 de tipuri de capuri, cu sistem
+              optic propriu și proprietate intelectuală independentă (peste 100 de
+              brevete). Capul e o stivă optică de precizie: colimatorul preia
+              fasciculul divergent din fibră și îl face paralel; lentila de
+              focalizare îl strânge în spotul de lucru; geamul de protecție
+              sacrificial apără lentila scumpă de stropi și fum; duza dirijează
+              fasciculul și gazul de asistență coaxial, iar inelul ceramic ține
+              duza și face parte din sistemul capacitiv de reglare a înălțimii.
+            </p>
+          </Reveal>
 
-      {/* 06 — OPTICĂ, LENTILE & MENTENANȚĂ (light) — stub ——————————————— */}
-      <Chapter
-        id="optica-mentenanta"
-        index="06"
-        kicker="— OPTICĂ & SERVICE"
-        title="Optică, lentile și mentenanță"
-      >
-        <MediaPlaceholder
-          kind="image"
-          ratio="16 / 9"
-          label="ANIMAȚIE SVG · cover-slide + lentilă termică"
-        />
-      </Chapter>
+          {/* stiva optică „exploded" — A4 (pinned) */}
+          <OpticalStackExploded />
+
+          {/* variante de cap — 3 carduri cu foto (stagger) */}
+          <RevealGroup as="ul" className="mt-16 grid gap-6 md:grid-cols-3">
+            {[
+              {
+                model: "HC-TJ300",
+                sub: "cap inteligent de tăiere",
+                alt: "Cap de tăiere laser inteligent Han's Focus HC-TJ300",
+                foto: "FOTO · HC-TJ300",
+                body:
+                  "Monitorizează în buclă închisă temperatura, presiunea din cameră și gradul de contaminare al fiecărei lentile. Are detecție de perforare și de străpungere completă. Tehnologie brevetată anti-praf, cu rezistență ridicată la contaminare.",
+              },
+              {
+                model: "RC206",
+                sub: "cap de bizotare",
+                alt: "Cap de tăiere laser pentru bizou ±45° (Han's Focus RC206)",
+                foto: "FOTO · RC206 (înclinat pe bizou)",
+                body:
+                  "Focalizare cu servomotor la 3 m/min. Etanșare ridicată împotriva contaminării. Taie bizou la orice unghi în gama ±45°.",
+              },
+              {
+                model: "RC304",
+                sub: "cap 3D pe 5 axe",
+                alt: "Cap de tăiere laser 3D pe 5 axe Han's Focus RC304",
+                foto: "FOTO · RC304 pe piesă 3D",
+                body:
+                  "Axe cu acționare directă (direct-drive), repetabilitate ≤ 0,005°. Rotație până la 120 rot/min pentru eficiență ridicată. Protecție la coliziune din orice unghi, cu revenire rapidă după impact.",
+              },
+            ].map((c) => (
+              <RevealItem as="li" key={c.model}>
+                <MediaPlaceholder kind="image" ratio="4 / 3" label={c.foto} alt={c.alt} />
+                <p className="mono-label mt-4 text-blue-600">{c.model}</p>
+                <h3 className="mt-1 font-display-600 text-h4 text-ink">{c.sub}</h3>
+                <p className="mt-2 text-[0.925rem] leading-relaxed text-ink-soft">{c.body}</p>
+              </RevealItem>
+            ))}
+          </RevealGroup>
+
+          <p className="mono-label mt-8 text-steel-500">
+            Compatibil QBH universal · FW530 pentru sudură/placare cu protecție
+            tri-direcțională anti-stropi
+          </p>
+
+          <KaunerNote>
+            configurăm capul potrivit proceselor tale (tablă plană, bizou, piese
+            3D) și ținem optica în parametri prin service programat.
+          </KaunerNote>
+        </div>
+      </section>
+
+      {/* 4.6 — OPTICĂ, LENTILE & MENTENANȚĂ (light) — A5 + A6 ———————————— */}
+      <section id="optica-mentenanta" className="cv-section border-t border-line bg-paper">
+        <div className="container-kauner py-section-sm md:py-section">
+          <Reveal>
+            <div className="mono-label flex items-center gap-3 text-steel-500">
+              <span className="tnum text-blue-600">06</span>
+              <span className="block h-px w-9 bg-blue-600/50" aria-hidden />
+              — OPTICĂ & SERVICE
+            </div>
+          </Reveal>
+          <Reveal delay={0.06} className="mt-5">
+            <h2 className="max-w-[24ch] font-display text-h2 text-ink">
+              Lentilele decid cât timp taie curat mașina.
+            </h2>
+          </Reveal>
+
+          {/* Sub-bloc 1 — Efectul de lentilă termică (A5) */}
+          <div className="mt-14 grid gap-10 lg:grid-cols-2 lg:items-center">
+            <Reveal>
+              <ThermalLensAnim />
+            </Reveal>
+            <Reveal delay={0.06}>
+              <h3 className="font-display-600 text-h4 text-ink">Efectul de lentilă termică.</h3>
+              <p className="mt-3 max-w-[64ch] text-[0.975rem] leading-relaxed text-ink-soft">
+                Geamul de protecție de sub lentila de focalizare e prima linie de
+                apărare și consumabilul care se schimbă cel mai des. Când se depune
+                praf, ulei sau stropi pe el, contaminarea absoarbe o parte din
+                fascicul, se încălzește și deformează sticla — care începe să se
+                comporte ca o lentilă parazită și mută punctul de focalizare cu
+                până la câțiva milimetri. Mașina crede că e la înălțimea corectă,
+                dar fasciculul focalizează greșit: tăietura se degradează, apar
+                bavuri, iar operatorul e tentat să urce puterea — ceea ce încălzește
+                și mai tare optica. La metale reflectorizante, o parte din fascicul
+                revine pe traseul optic și poate degrada acoperirile lentilelor sau
+                chiar sursa.
+              </p>
+            </Reveal>
+          </div>
+
+          {/* Sub-bloc 2 — De ce monitorizarea rezolvă problema (A6) */}
+          <div className="mt-16 grid gap-10 lg:grid-cols-2 lg:items-center">
+            <Reveal className="lg:order-2">
+              <CoverSlideAnim />
+            </Reveal>
+            <Reveal delay={0.06} className="lg:order-1">
+              <h3 className="font-display-600 text-h4 text-ink">
+                De ce monitorizarea rezolvă problema.
+              </h3>
+              <p className="mt-3 max-w-[64ch] text-[0.975rem] leading-relaxed text-ink-soft">
+                Capul HC-TJ300 nu așteaptă ca tăietura să se strice: monitorizează
+                în buclă închisă temperatura, presiunea din cameră și contaminarea
+                fiecărei lentile și semnalează problema înainte ca ea să afecteze
+                calitatea. Etanșarea ridicată și tehnologia brevetată anti-praf țin
+                optica curată mai mult timp, iar geamul de protecție sacrificial se
+                schimbă rapid, printr-o ușă de acces etanșă, fără să expui restul
+                opticii.
+              </p>
+            </Reveal>
+          </div>
+
+          {/* Sub-bloc 3 — Calibrare automată & service */}
+          <div className="mt-16">
+            <Reveal>
+              <h3 className="font-display-600 text-h4 text-ink">Calibrare automată & service.</h3>
+              <p className="mt-3 max-w-[76ch] text-[0.975rem] leading-relaxed text-ink-soft">
+                Calibrarea manuală coaxială lasă o eroare de ~0,1 mm; calibrarea
+                automată o duce la 0,01 mm — de zece ori mai precis, repetabil, fără
+                dependență de mâna operatorului. Compartimentul de duze cu 12
+                sertare permite schimbarea rapidă a duzei potrivite fiecărui proces,
+                iar inspecția vizuală automată verifică alinierea. Kauner asigură
+                punerea în funcțiune, instruirea și mentenanța periodică local,
+                sprijinite de rețeaua globală de service Han&apos;s — peste 180 de
+                birouri și echipe de aplicații care fac întreținerea de rutină și
+                răspund rapid la solicitări.
+              </p>
+            </Reveal>
+            <RevealGroup as="ul" className="mt-10 grid gap-6 md:grid-cols-3">
+              {[
+                { label: "FOTO · compartiment duze (12 sertare)", alt: undefined as string | undefined },
+                { label: "FOTO · stație de calibrare / inspecție", alt: undefined },
+                {
+                  label: "FOTO · tehnician Kauner la mentenanță",
+                  alt: "Tehnician Kauner la mentenanța unei mașini de debitare laser",
+                },
+              ].map((f) => (
+                <RevealItem as="li" key={f.label}>
+                  <MediaPlaceholder kind="image" ratio="4 / 3" label={f.label} alt={f.alt} />
+                </RevealItem>
+              ))}
+            </RevealGroup>
+          </div>
+        </div>
+      </section>
 
       {/* 07 — CNC & SOFTWARE (light) — stub ————————————————————————————— */}
       <Chapter id="cnc-software" index="07" kicker="— SUBSISTEM 03" title="Sistemul CNC și software">
