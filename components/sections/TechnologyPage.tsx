@@ -6,7 +6,11 @@ import { ArrowRight, Link2, Factory, TrendingUp, ShieldCheck } from "lucide-reac
 import { Button } from "@/components/ui/Button";
 import { DarkMoment } from "@/components/ui/DarkMoment";
 import { MediaPlaceholder } from "@/components/ui/MediaPlaceholder";
+import { SpecTable } from "@/components/ui/SpecTable";
 import { IntegratedChainDiagram } from "@/components/ui/IntegratedChainDiagram";
+import { FiberSchematic } from "@/components/ui/FiberSchematic";
+import { BppFocusSlider } from "@/components/ui/BppFocusSlider";
+import { KaunerNote } from "@/components/ui/KaunerNote";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/Reveal";
 
 /*
@@ -244,43 +248,195 @@ export function TechnologyPage() {
         </div>
       </section>
 
-      {/* 03 — CUM FUNCȚIONEAZĂ fibra (light) — stub ————————————————————— */}
-      <Chapter
-        id="cum-functioneaza"
-        index="03"
-        kicker="— FIZICA"
-        title="Cum funcționează un laser cu fibră"
-      >
-        <MediaPlaceholder
-          kind="image"
-          ratio="16 / 9"
-          label="SCHEMĂ SVG · pompaj → fibră → FBG → ieșire (animată)"
-        />
-      </Chapter>
+      {/* 4.3 — CUM FUNCȚIONEAZĂ fibra (light) — schema A2 —————————————————— */}
+      <section id="cum-functioneaza" className="cv-section border-t border-line bg-paper">
+        <div className="container-kauner py-section-sm md:py-section">
+          <Reveal>
+            <div className="mono-label flex items-center gap-3 text-steel-500">
+              <span className="tnum text-blue-600">03</span>
+              <span className="block h-px w-9 bg-blue-600/50" aria-hidden />
+              — CUM FUNCȚIONEAZĂ FIBRA
+            </div>
+          </Reveal>
+          <Reveal delay={0.06} className="mt-5">
+            <h2 className="max-w-[22ch] font-display text-h2 text-ink">
+              De ce fibra taie mai repede și mai eficient.
+            </h2>
+          </Reveal>
+          <Reveal delay={0.1} className="mt-6">
+            <p className="max-w-[74ch] text-body-l text-ink-soft">
+              Un laser cu fibră nu are oglinzi de aliniat și nici gaz de umplut.
+              Fasciculul se naște și se amplifică chiar în interiorul unei fibre
+              optice.
+            </p>
+          </Reveal>
 
-      {/* 04 — SURSA LASER (light) + sub-moment ÎNTUNECAT — stub —————————— */}
-      <Chapter
-        id="sursa-laser"
-        index="04"
-        kicker="— SUBSISTEM 01"
-        title="Sursa laser cu fibră"
-      >
-        <MediaPlaceholder
-          kind="image"
-          ratio="16 / 9"
-          label="PANOU SPEC + VIDEO SURSĂ · slider BPP → spot"
-        />
-      </Chapter>
+          <div className="mt-12 md:mt-14">
+            <FiberSchematic />
+          </div>
 
+          {/* „De ce contează" — 3 mini-carduri */}
+          <RevealGroup
+            as="ul"
+            className="mt-14 grid gap-px overflow-hidden rounded-sharp border border-line bg-line md:grid-cols-3"
+          >
+            {[
+              {
+                t: "Eficiență.",
+                b: (
+                  <>
+                    Randament la priză peste <Fig>40%</Fig> — de câteva ori mai
+                    mult decât un laser CO₂ clasic. Mai puțină energie, cost mai
+                    mic pe piesă.
+                  </>
+                ),
+              },
+              {
+                t: "Focalizare.",
+                b: (
+                  <>
+                    1080 nm e de ~<Fig>10×</Fig> mai scurt decât CO₂ (10,6 µm),
+                    deci se focalizează într-un spot de ~10× mai mic — densitate
+                    de putere de până la <Fig>100×</Fig> mai mare la aceeași
+                    putere medie.
+                  </>
+                ),
+              },
+              {
+                t: "Fiabilitate.",
+                b: (
+                  <>
+                    Construcție integral pe fibră, fără oglinzi de reglat →
+                    robustețe la vibrații și contaminare, mentenanță minimă.
+                  </>
+                ),
+              },
+            ].map((c) => (
+              <RevealItem as="li" key={c.t} className="bg-paper p-7">
+                <h3 className="font-display-600 text-h4 text-ink">{c.t}</h3>
+                <p className="mt-2 text-[0.95rem] leading-relaxed text-ink-soft">{c.b}</p>
+              </RevealItem>
+            ))}
+          </RevealGroup>
+        </div>
+      </section>
+
+      {/* 4.4 — SURSA LASER — Han's Photonics / HSC (light) ———————————————— */}
+      <section id="sursa-laser" className="cv-section border-t border-line bg-paper">
+        <div className="container-kauner py-section-sm md:py-section">
+          <Reveal>
+            <div className="mono-label flex items-center gap-3 text-steel-500">
+              <span className="tnum text-blue-600">04</span>
+              <span className="block h-px w-9 bg-blue-600/50" aria-hidden />
+              — SUBSISTEM 01
+            </div>
+          </Reveal>
+          <Reveal delay={0.06} className="mt-5">
+            <h2 className="max-w-[26ch] font-display text-h2 text-ink">
+              Sursa laser — fibră, dezvoltată in-house (Han&apos;s Photonics)
+            </h2>
+          </Reveal>
+
+          <div className="mt-6 max-w-[74ch] space-y-5 text-body-l text-ink-soft">
+            <Reveal>
+              <p>
+                Sursele cu fibră Han&apos;s Photonics (seria HSC) acoperă 3–30 kW
+                în regim continuu, cu configurații de mașină disponibile până la
+                60 kW pentru tăiere grea. Modulul optic redesenat atinge un
+                randament la priză de peste 40% — mai puțină energie consumată
+                pentru aceeași putere, adică un cost de operare mai mic pe fiecare
+                piesă. Platforma de control se integrează plug-and-play prin
+                magistrale de câmp uzuale, cu modelare a pulsului la scară de
+                microsecunde și diagnoză în timp real.
+              </p>
+            </Reveal>
+            <Reveal>
+              <p>
+                <strong className="font-semibold text-ink">
+                  Calitatea fasciculului (BPP).
+                </strong>{" "}
+                Performanța de tăiere nu ține doar de kW, ci de cât de fin se
+                focalizează fasciculul. BPP (beam parameter product, în mm·mrad)
+                măsoară exact asta: cu cât e mai mic, cu atât spotul e mai mic și
+                densitatea de putere mai mare. HSC oferă BPP ≤ 1 / 2 / 4
+                selectabil pe modelele de 3–6 kW și BPP ≤ 4 pe cele de 12–30 kW.
+                Practic: BPP ≤ 1 mm·mrad focalizează sub 0,1 mm — tăiere fină,
+                rapidă, cu tăietură îngustă pe tablă subțire; BPP mai mare
+                distribuie energia pe un spot mai larg, cu profunzime de
+                focalizare mai mare — mai stabil pe tablă groasă. Fibra de ieșire
+                de 100 µm (30/50/100 µm pe modelele mici) permite alegerea
+                spotului potrivit procesului.
+              </p>
+            </Reveal>
+            <Reveal>
+              <p>
+                <strong className="font-semibold text-ink">Reflexie inversă.</strong>{" "}
+                Cuprul, alama și aluminiul reflectă o parte din fascicul înapoi pe
+                traseul optic — suficient cât să degradeze lentilele sau chiar să
+                deterioreze sursa. HSC are izolare puternică la reflexia inversă,
+                așa că taie inclusiv materiale foarte reflectorizante fără să pună
+                în pericol sursa.
+              </p>
+            </Reveal>
+          </div>
+
+          {/* Panou de specificații — gama HSC (§4.4, verbatim) */}
+          <div className="mt-12">
+            <SpecTable
+              columns={["Model", "Putere", "λ", "BPP", "Fibră ieșire", "Conector", "Randament", "Răcire"]}
+              rows={[
+                ["HSC-3000", "3 kW", "1080 nm", "≤1/2/4", "30/50/100 µm", "QBH", ">40%", "apă"],
+                ["HSC-6000", "6 kW", "1080 nm", "≤1/2/4", "34/50/100 µm", "QBH", ">40%", "apă"],
+                ["HSC-12000", "12 kW", "1080 nm", "≤4", "100 µm", "Q+/HPC", ">40%", "apă"],
+                ["HSC-20000", "20 kW", "1080 nm", "≤4", "100 µm", "Q+/HPC", ">40%", "apă"],
+                ["HSC-30000", "30 kW", "1080 nm", "≤4", "100 µm", "Q+/HPC", ">40%", "apă"],
+              ]}
+              caption="Gama HSC — seria de surse cu fibră (catalog Han's)"
+            />
+          </div>
+
+          {/* Vizual interactiv A3 (BPP→spot) + foto sursă */}
+          <div className="mt-12 grid gap-8 lg:grid-cols-[1fr_1fr] lg:items-stretch">
+            <BppFocusSlider />
+            <div className="grid gap-6">
+              <MediaPlaceholder
+                kind="image"
+                ratio="4 / 3"
+                label="FOTO · unitate-sursă HSC (cabinet)"
+                alt="Sursă laser cu fibră Han's Photonics HSC pentru debitare"
+              />
+              <MediaPlaceholder
+                kind="image"
+                ratio="16 / 9"
+                label="FOTO · conector QBH / capăt de fibră"
+              />
+            </div>
+          </div>
+
+          <KaunerNote>
+            alegem puterea și calitatea fasciculului (BPP) pentru materialele și
+            grosimile tale reale, punem sursa în funcțiune și o susținem cu service
+            local.
+          </KaunerNote>
+        </div>
+      </section>
+
+      {/* Sub-moment ÎNTUNECAT — taie cupru/alamă (reflexie inversă) —————— */}
       <DarkMoment
         kind="video"
         label="VIDEO · tăiere cupru/alamă macro (reflectorizant)"
         alt="Debitare laser a metalelor reflectorizante — cupru și alamă"
-        minH="min-h-[60vh]"
+        minH="min-h-[62vh]"
         align="center"
         overlay={0.58}
       >
         <div className="mono-label text-white/60">— SUB-MOMENT · REFLEXIE INVERSĂ</div>
+        <p className="mt-5 max-w-[18ch] font-display text-h1 text-white">
+          Taie și ce reflectă.
+        </p>
+        <p className="mt-4 max-w-[46ch] text-body-l text-white/80">
+          Cupru, alamă, aluminiu — fără compromis pentru sursă.
+        </p>
       </DarkMoment>
 
       {/* 05 — CAPUL DE TĂIERE (light) — stub —————————————————————————————— */}
