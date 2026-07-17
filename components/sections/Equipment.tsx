@@ -42,7 +42,7 @@ export function Equipment() {
                     // Real photos drop in per card here. Sheet-cutting wired for preview.
                     src={
                       p.slug === "debitare-tabla"
-                        ? "/images/equip-sheet.png"
+                        ? "/images/equip-sheet.jpg"
                         : undefined
                     }
                     alt={p.alt}

@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 
 /*
  * §4.11 — a discrete abstract "global presence" field: scattered office nodes
@@ -20,9 +21,13 @@ const RO: [number, number] = [250, 118]; // Kauner node
 
 export function PresenceMap() {
   const reduce = useReducedMotion() ?? false;
+  // Pause the infinite pin pulse while off-screen.
+  const ref = useRef<SVGSVGElement>(null);
+  const inView = useInView(ref, { amount: 0.4 });
 
   return (
     <svg
+      ref={ref}
       viewBox="0 0 480 240"
       className="w-full"
       role="img"
@@ -41,7 +46,7 @@ export function PresenceMap() {
       ))}
 
       {/* România — Kauner pin */}
-      {!reduce && (
+      {!reduce && inView && (
         <motion.circle
           cx={RO[0]}
           cy={RO[1]}

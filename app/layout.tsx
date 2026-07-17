@@ -47,6 +47,14 @@ export const metadata: Metadata = {
     type: "website",
     locale: "ro_RO",
     alternateLocale: "en_US",
+    images: [
+      {
+        url: "/images/hero-laser.jpg",
+        width: 1200,
+        height: 675,
+        alt: "Debitare laser cu fibră — front de tăiere în oțel",
+      },
+    ],
   },
 };
 

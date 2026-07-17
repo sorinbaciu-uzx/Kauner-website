@@ -99,6 +99,13 @@ export function Nav() {
     <header
       id="top"
       onMouseLeave={closeEquip}
+      // Close the mega-menu when keyboard focus leaves the header entirely —
+      // otherwise a Tab past the nav leaves an orphaned open panel.
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) {
+          setEquipOpen(false);
+        }
+      }}
       className={`fixed inset-x-0 top-0 z-50 transition-colors duration-500 ease-out-engineered ${
         onLight
           ? "border-b border-mist-200 bg-white/90 backdrop-blur-md"
@@ -125,24 +132,126 @@ export function Nav() {
             // click, but hovering/focusing it reveals the category panel.
             if (link.href === EQUIP_HREF) {
               return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  aria-current={active ? "page" : undefined}
-                  aria-expanded={equipOpen}
-                  aria-haspopup="true"
-                  onMouseEnter={openEquip}
-                  onFocus={openEquip}
-                  className={`mono-label inline-flex items-center gap-1 transition-colors ${tone}`}
-                >
-                  {link.label}
-                  <ChevronDown
-                    className={`h-3.5 w-3.5 transition-transform duration-300 ${
-                      equipOpen ? "rotate-180" : ""
-                    }`}
-                    aria-hidden
-                  />
-                </Link>
+                // Fragment: the trigger AND its panel sit together in the DOM,
+                // so Tab moves from the trigger straight into the open panel.
+                <span key={link.href} className="contents">
+                  <Link
+                    href={link.href}
+                    aria-current={active ? "page" : undefined}
+                    aria-expanded={equipOpen}
+                    aria-haspopup="true"
+                    onMouseEnter={openEquip}
+                    onFocus={openEquip}
+                    className={`mono-label inline-flex items-center gap-1 transition-colors ${tone}`}
+                  >
+                    {link.label}
+                    <ChevronDown
+                      className={`h-3.5 w-3.5 transition-transform duration-300 ${
+                        equipOpen ? "rotate-180" : ""
+                      }`}
+                      aria-hidden
+                    />
+                  </Link>
+
+                  {/* Equipment mega-menu (desktop only) — absolute, anchored to
+                      the fixed header, so DOM position doesn't affect layout. */}
+                  <AnimatePresence>
+                    {equipOpen && (
+                      <motion.div
+                        key="equip-mega"
+                        initial={{ opacity: 0, y: -8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -8 }}
+                        transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+                        onMouseEnter={openEquip}
+                        onMouseLeave={closeEquip}
+                        className="absolute inset-x-0 top-full hidden border-b border-mist-200 bg-white shadow-[0_24px_48px_-24px_rgba(15,23,42,0.18)] lg:block"
+                      >
+                        <div className="container-kauner grid grid-cols-[minmax(0,320px)_1fr] gap-12 py-10">
+                          {/* Left — category list */}
+                          <div className="border-r border-mist-200 pr-10">
+                            <p className="mono-label text-steel-400">
+                              {t.equipment.label}
+                            </p>
+                            <ul className="mt-6 flex flex-col">
+                              {t.equipment.items.map((item, i) => {
+                                const current = i === activeCat;
+                                return (
+                                  <li key={item.slug}>
+                                    <Link
+                                      href={`${EQUIP_HREF}#${item.slug}`}
+                                      onMouseEnter={() => setActiveCat(i)}
+                                      onFocus={() => setActiveCat(i)}
+                                      onClick={() => setEquipOpen(false)}
+                                      className={`group/cat -mx-4 flex items-center justify-between gap-4 rounded-sharp px-4 py-3 font-display-600 text-[1.05rem] transition-colors ${
+                                        current
+                                          ? "bg-mist-100 text-kauner-blue"
+                                          : "text-steel-500 hover:text-ink"
+                                      }`}
+                                    >
+                                      {item.name}
+                                      <ArrowRight
+                                        className={`h-4 w-4 text-kauner-blue transition-all duration-300 ease-out-engineered ${
+                                          current
+                                            ? "translate-x-0 opacity-100"
+                                            : "-translate-x-1 opacity-0 group-hover/cat:translate-x-0 group-hover/cat:opacity-60"
+                                        }`}
+                                        strokeWidth={2.5}
+                                        aria-hidden
+                                      />
+                                    </Link>
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                          </div>
+
+                          {/* Right — models within the active category */}
+                          <div className="min-w-0">
+                            <h3 className="font-display-600 text-h4 text-ink">
+                              {t.equipment.items[activeCat].name}
+                            </h3>
+
+                            {t.equipment.items[activeCat].models.length > 0 ? (
+                              <ul className="mt-7 grid grid-cols-2 gap-x-10 gap-y-1 xl:grid-cols-3">
+                                {t.equipment.items[activeCat].models.map(
+                                  (model) => (
+                                    <li key={model.slug}>
+                                      <Link
+                                        href={`${EQUIP_HREF}/${model.slug}`}
+                                        onClick={() => setEquipOpen(false)}
+                                        className="block py-2 text-[0.95rem] text-steel-400 outline-none transition-colors hover:text-ink focus-visible:text-ink"
+                                      >
+                                        {model.name}
+                                      </Link>
+                                    </li>
+                                  ),
+                                )}
+                              </ul>
+                            ) : (
+                              <p className="mt-6 max-w-md text-[0.95rem] leading-relaxed text-steel-700">
+                                {t.equipment.items[activeCat].desc}
+                              </p>
+                            )}
+
+                            <Link
+                              href={`${EQUIP_HREF}#${t.equipment.items[activeCat].slug}`}
+                              onClick={() => setEquipOpen(false)}
+                              className="group mt-8 inline-flex items-center gap-1.5 text-sm font-semibold text-steel-500 outline-none transition-colors hover:text-ink focus-visible:text-ink"
+                            >
+                              {t.equipment.learnMore}
+                              <ChevronRight
+                                className="h-4 w-4 text-kauner-blue transition-transform duration-300 ease-out-engineered group-hover:translate-x-1"
+                                strokeWidth={2.5}
+                                aria-hidden
+                              />
+                            </Link>
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </span>
               );
             }
             return (
@@ -184,100 +293,6 @@ export function Nav() {
           <Menu className={`h-6 w-6 ${onLight ? "text-ink" : "text-white"}`} />
         </button>
       </div>
-
-      {/* Equipment mega-menu (desktop only) */}
-      <AnimatePresence>
-        {equipOpen && (
-          <motion.div
-            key="equip-mega"
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-            onMouseEnter={openEquip}
-            onMouseLeave={closeEquip}
-            className="absolute inset-x-0 top-full hidden border-b border-mist-200 bg-white shadow-[0_24px_48px_-24px_rgba(15,23,42,0.18)] lg:block"
-          >
-            <div className="container-kauner grid grid-cols-[minmax(0,320px)_1fr] gap-12 py-10">
-              {/* Left — category list */}
-              <div className="border-r border-mist-200 pr-10">
-                <p className="mono-label text-steel-400">{t.equipment.label}</p>
-                <ul className="mt-6 flex flex-col">
-                  {t.equipment.items.map((item, i) => {
-                    const current = i === activeCat;
-                    return (
-                      <li key={item.slug}>
-                        <Link
-                          href={`${EQUIP_HREF}#${item.slug}`}
-                          onMouseEnter={() => setActiveCat(i)}
-                          onFocus={() => setActiveCat(i)}
-                          onClick={() => setEquipOpen(false)}
-                          className={`group/cat -mx-4 flex items-center justify-between gap-4 rounded-sharp px-4 py-3 font-display-600 text-[1.05rem] transition-colors ${
-                            current
-                              ? "bg-mist-100 text-kauner-blue"
-                              : "text-steel-500 hover:text-ink"
-                          }`}
-                        >
-                          {item.name}
-                          <ArrowRight
-                            className={`h-4 w-4 text-kauner-blue transition-all duration-300 ease-out-engineered ${
-                              current
-                                ? "translate-x-0 opacity-100"
-                                : "-translate-x-1 opacity-0 group-hover/cat:translate-x-0 group-hover/cat:opacity-60"
-                            }`}
-                            strokeWidth={2.5}
-                            aria-hidden
-                          />
-                        </Link>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-
-              {/* Right — models within the active category */}
-              <div className="min-w-0">
-                <h3 className="font-display-600 text-h4 text-ink">
-                  {t.equipment.items[activeCat].name}
-                </h3>
-
-                {t.equipment.items[activeCat].models.length > 0 ? (
-                  <ul className="mt-7 grid grid-cols-2 gap-x-10 gap-y-1 xl:grid-cols-3">
-                    {t.equipment.items[activeCat].models.map((model) => (
-                      <li key={model.slug}>
-                        <Link
-                          href={`${EQUIP_HREF}/${model.slug}`}
-                          onClick={() => setEquipOpen(false)}
-                          className="block py-2 text-[0.95rem] text-steel-400 outline-none transition-colors hover:text-ink focus-visible:text-ink"
-                        >
-                          {model.name}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="mt-6 max-w-md text-[0.95rem] leading-relaxed text-steel-700">
-                    {t.equipment.items[activeCat].desc}
-                  </p>
-                )}
-
-                <Link
-                  href={`${EQUIP_HREF}#${t.equipment.items[activeCat].slug}`}
-                  onClick={() => setEquipOpen(false)}
-                  className="group mt-8 inline-flex items-center gap-1.5 text-sm font-semibold text-steel-500 outline-none transition-colors hover:text-ink focus-visible:text-ink"
-                >
-                  {t.equipment.learnMore}
-                  <ChevronRight
-                    className="h-4 w-4 text-kauner-blue transition-transform duration-300 ease-out-engineered group-hover:translate-x-1"
-                    strokeWidth={2.5}
-                    aria-hidden
-                  />
-                </Link>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* Mobile overlay */}
       <AnimatePresence>

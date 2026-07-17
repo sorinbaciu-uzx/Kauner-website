@@ -517,7 +517,8 @@ export const en = {
         lines: ["ISO 9001 · 14001", "CE · AEO"],
       },
     ],
-    materials: "TODO(EN): final copy delivered separately.",
+    materials:
+      "We cut carbon steel, stainless steel, aluminium, copper, brass and titanium — sheet, tube, profiles and H-beams — for metal fabrication, steel structures, automotive, furniture, heavy machinery and new energy.",
     cta: "See the full technology",
   },
 

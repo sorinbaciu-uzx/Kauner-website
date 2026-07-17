@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 
 type Seg = { x1: number; y1: number; x2: number; y2: number; key: string };
 type Node = { x: number; y: number; key: string };
@@ -28,6 +28,9 @@ export function CardFlow({
 }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
+  // Pause the infinite pulses while the section is off-screen (framer doesn't
+  // stop offscreen loops on its own).
+  const inView = useInView(ref, { amount: 0.15 });
   const [segs, setSegs] = useState<Seg[]>([]);
   const [nodes, setNodes] = useState<Node[]>([]);
   const [size, setSize] = useState({ w: 0, h: 0 });
@@ -162,6 +165,7 @@ export function CardFlow({
           ))}
 
           {!reduce &&
+            inView &&
             segs.map((s, i) => {
               const dx = s.x2 - s.x1;
               const dy = s.y2 - s.y1;

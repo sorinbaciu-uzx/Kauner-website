@@ -9,14 +9,9 @@ export const metadata: Metadata = {
   title: { absolute: "Tehnologie debitare laser cu fibră | Kauner" },
   description:
     "Debitare laser cu fibră pe echipamente Han's Laser: sursă, cap de tăiere și CNC de la același producător. Precizie, fiabilitate și service în România.",
-  alternates: {
-    canonical: "/tehnologie",
-    languages: {
-      "ro-RO": "/tehnologie",
-      "en-US": "/en/technology",
-      "x-default": "/tehnologie",
-    },
-  },
+  // NB: EN este comutare client-side (LocaleProvider), nu rută separată —
+  // deci fără hreflang en-US până nu există /en/* real (ar arăta spre 404).
+  alternates: { canonical: "/tehnologie" },
 };
 
 // §5B.6 — structured data: Organization + WebPage + BreadcrumbList + FAQPage.
@@ -64,7 +59,10 @@ export default function TehnologiePage() {
     <div className="pt-[72px]">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        // Escape "<" so future copy edits can never break out of the tag.
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+        }}
       />
       <TechnologyPage />
     </div>
