@@ -14,7 +14,12 @@ import { OpticalStackExploded } from "@/components/ui/OpticalStackExploded";
 import { ThermalLensAnim } from "@/components/ui/ThermalLensAnim";
 import { CoverSlideAnim } from "@/components/ui/CoverSlideAnim";
 import { EtherCatDiagram } from "@/components/ui/EtherCatDiagram";
+import { FmsDiagram } from "@/components/ui/FmsDiagram";
+import { IntegrationWheel } from "@/components/ui/IntegrationWheel";
+import { PresenceMap } from "@/components/ui/PresenceMap";
 import { Tabs } from "@/components/ui/Tabs";
+import { StatBand, type Stat } from "@/components/ui/StatBand";
+import { CountUp } from "@/components/ui/CountUp";
 import { KaunerNote } from "@/components/ui/KaunerNote";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/Reveal";
 
@@ -25,39 +30,6 @@ import { Reveal, RevealGroup, RevealItem } from "@/components/ui/Reveal";
  * Light/dark rhythm §2.3 — dark only via <DarkMoment>. Blue budget §2.1.
  * i18n: strings inline for now; the `tech.*` key tree lands with the EN pass (§7).
  */
-
-/** A light "chapter": mono blue index + rule (§2.4), then the semantic H2. */
-function Chapter({
-  id,
-  index,
-  kicker,
-  title,
-  children,
-}: {
-  id?: string;
-  index: string;
-  kicker: string;
-  title: string;
-  children?: ReactNode;
-}) {
-  return (
-    <section id={id} className="cv-section border-t border-line bg-paper">
-      <div className="container-kauner py-section-sm md:py-section">
-        <Reveal>
-          <div className="mono-label flex items-center gap-3 text-steel-500">
-            <span className="tnum text-blue-600">{index}</span>
-            <span className="block h-px w-9 bg-blue-600/50" aria-hidden />
-            {kicker}
-          </div>
-        </Reveal>
-        <Reveal delay={0.06} className="mt-5">
-          <h2 className="max-w-[26ch] font-display text-h2 text-ink">{title}</h2>
-        </Reveal>
-        <div className="mt-10 md:mt-14">{children}</div>
-      </div>
-    </section>
-  );
-}
 
 const WHY_CARDS = [
   {
@@ -880,13 +852,13 @@ export function TechnologyPage() {
         </div>
       </section>
 
-      {/* 09 — AUTOMATIZARE (dark, cinematic) — stub —————————————————————— */}
+      {/* 4.9 — AUTOMATIZARE FMS·MES·HIOT (întunecat, cinematic) —————————— */}
       <DarkMoment
         id="automatizare"
         kind="video"
         label="VIDEO · linie automată lights-out (turn, roboți, cărucioare)"
         alt="Linie automată de debitare laser cu turn de depozitare și roboți"
-        minH="min-h-[80vh]"
+        minH="min-h-screen"
         align="center"
         overlay={0.6}
       >
@@ -895,47 +867,258 @@ export function TechnologyPage() {
           <span className="block h-px w-9 bg-blue-300/50" aria-hidden />
           AUTOMATIZARE · FMS · MES · HIOT
         </div>
-        <h2 className="mt-5 max-w-[20ch] font-display text-display text-white">
-          Automatizare & fabrică inteligentă
+        <h2 className="mt-6 max-w-[18ch] font-display text-display text-white">
+          Producție fără operator, în tura a treia.
         </h2>
+        <p className="mt-6 max-w-[62ch] text-body-l text-white/80">
+          Turn de depozitare, roboți de încărcare/descărcare, cărucioare de schimb
+          și dispecerizare FMS+PLC+CNC — linia se conduce singură.
+        </p>
       </DarkMoment>
 
-      {/* 10 — FABRICAȚIE & CONTROL CALITATE (light) — stub ——————————————— */}
-      <Chapter id="fabricatie" index="10" kicker="— DOVADA" title="Fabricație și control de calitate">
-        <MediaPlaceholder
-          kind="image"
-          ratio="16 / 9"
-          label="FOTO fabricație + BANDĂ STATISTICI (counters)"
-        />
-      </Chapter>
+      {/* revenire pe deschis — paragraf + diagramă A8 + bandă rezultate */}
+      <section className="cv-section border-t border-line bg-paper">
+        <div className="container-kauner py-section-sm md:py-section">
+          <Reveal>
+            <p className="max-w-[76ch] text-body-l text-ink-soft">
+              Peste utilaj, Han&apos;s integrează automatizarea completă: turn de
+              depozitare tablă, roboți de încărcare/descărcare, cărucioare de
+              schimb pe două niveluri și un sistem de dispecerizare FMS+PLC+CNC
+              pentru producție „lights-out”. Terminalul FMS unifică rutarea
+              proceselor, BOM-ul, comenzile și planificarea. Platforma MES și HIOT
+              (IoT-ul industrial Han&apos;s) conectează fiecare mașină:
+              monitorizare în timp real, analiză pe big data, predicție de opriri
+              și notificări automate de mentenanță.
+            </p>
+          </Reveal>
 
-      {/* 11 — PREZENȚĂ & SERVICE KAUNER (light) — stub ——————————————————— */}
-      <Chapter
-        id="prezenta-service"
-        index="11"
-        kicker="— KAUNER"
-        title="Prezență globală, service în România"
-      >
-        <MediaPlaceholder
-          kind="image"
-          ratio="16 / 9"
-          label="HARTĂ + roata integrării + FOTO echipa Kauner"
-        />
-      </Chapter>
+          <div className="mt-12">
+            <FmsDiagram />
+          </div>
 
-      {/* 12 — STATISTICI + CTA (light) — stub ——————————————————————————— */}
-      <Chapter
-        id="statistici-cta"
-        index="12"
-        kicker="— RECAPITULARE"
-        title="Statistici & cerere de mostră"
-      >
-        <MediaPlaceholder
-          kind="image"
-          ratio="21 / 9"
-          label="BANDĂ CIFRE (counters) + CTA final"
-        />
-      </Chapter>
+          {/* bandă rezultate — counters, cu semnul minus păstrat */}
+          <RevealGroup
+            as="ul"
+            className="mt-14 grid grid-cols-2 gap-x-6 gap-y-9 border-t border-line pt-10 lg:grid-cols-4 lg:gap-x-0"
+          >
+            {[
+              { note: "CICLU DE PRODUCȚIE", value: "25" },
+              { note: "REBUT", value: "18" },
+              { note: "COST CU FORȚA DE MUNCĂ", value: "30" },
+              { note: "STOC", value: "23" },
+            ].map((r, i) => (
+              <RevealItem
+                as="li"
+                key={r.note}
+                className={`min-w-0 text-center lg:px-6 ${
+                  i > 0 ? "lg:border-l lg:border-line" : ""
+                }`}
+              >
+                <span className="mono-label flex min-h-[2.4em] items-end justify-center text-steel-500">
+                  {r.note}
+                </span>
+                <p className="tnum mt-3 font-display-600 leading-none tracking-tight text-ink text-[clamp(1.5rem,2.4vw,2rem)]">
+                  −<CountUp value={r.value} />
+                  <span className="align-baseline text-[0.7em]">%</span>
+                </p>
+              </RevealItem>
+            ))}
+          </RevealGroup>
+
+          <KaunerNote>
+            dimensionăm automatizarea la volumul tău real și o integrăm în fluxul
+            existent, fără să-ți oprim producția.
+          </KaunerNote>
+        </div>
+      </section>
+
+      {/* 4.10 — FABRICAȚIE & CONTROL CALITATE (light) ———————————————————— */}
+      <section id="fabricatie" className="cv-section border-t border-line bg-paper">
+        <div className="container-kauner py-section-sm md:py-section">
+          <Reveal>
+            <div className="mono-label flex items-center gap-3 text-steel-500">
+              <span className="tnum text-blue-600">10</span>
+              <span className="block h-px w-9 bg-blue-600/50" aria-hidden />
+              — DOVADA
+            </div>
+          </Reveal>
+          <Reveal delay={0.06} className="mt-5">
+            <h2 className="max-w-[24ch] font-display text-h2 text-ink">
+              Fabricația: unde precizia devine repetabilă.
+            </h2>
+          </Reveal>
+          <Reveal delay={0.1} className="mt-6">
+            <p className="max-w-[76ch] text-body-l text-ink-soft">
+              Centrul de fabricație Han&apos;s a investit aproape 60 de milioane
+              USD în echipamente de producție și inspecție de înaltă precizie:
+              centre de prelucrare pe 5 axe DMG (Germania), linii orizontale
+              automate MAZAK și mașini de măsurat în coordonate ZEISS (Germania).
+              Corpurile de mașină, componentele funcționale, sistemul optic și cel
+              de control sunt fabricate intern — de aceea toleranțele se păstrează
+              de la prima piesă la a mia.
+            </p>
+          </Reveal>
+
+          {/* bandă statistici de fabricație — counters */}
+          <div className="mt-12">
+            <StatBand
+              tone="light"
+              columnsClass="sm:grid-cols-3"
+              items={
+                [
+                  { note: "ECHIPAMENTE DE PRECIZIE", value: "~60", unit: "M USD" },
+                  { note: "SETURI CNC DE ÎNALTĂ PRECIZIE", value: "6000" },
+                  { note: "PRIMA SOLUȚIE DE PRELUCRARE LA", value: "14", unit: "m" },
+                ] as Stat[]
+              }
+            />
+          </div>
+
+          {/* foto echipamente premium de fabricație */}
+          <RevealGroup as="ul" className="mt-12 grid gap-6 md:grid-cols-3">
+            {[
+              "FOTO · centru de prelucrare 5 axe DMG",
+              "FOTO · linie orizontală automată MAZAK",
+              "FOTO · mașină de măsurat în coordonate ZEISS",
+            ].map((l) => (
+              <RevealItem as="li" key={l}>
+                <MediaPlaceholder kind="image" ratio="4 / 3" label={l} />
+              </RevealItem>
+            ))}
+          </RevealGroup>
+
+          {/* control calitate — counters + certificări */}
+          <div className="mt-14">
+            <StatBand
+              tone="light"
+              columnsClass="sm:grid-cols-3"
+              items={
+                [
+                  { note: "INGINERI DE CALITATE", value: "150+" },
+                  { note: "TIPURI DE INSTRUMENTE DE MĂSURĂ", value: "200+" },
+                  { note: "EXPERȚI QC", value: "100+" },
+                ] as Stat[]
+              }
+            />
+            <p className="mono-label mt-8 text-steel-500">
+              Certificări: ISO 9001 · ISO 14001 · CE · AEO
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* 4.11 — PREZENȚĂ & SERVICE KAUNER (light) ————————————————————————— */}
+      <section id="prezenta-service" className="cv-section border-t border-line bg-paper">
+        <div className="container-kauner py-section-sm md:py-section">
+          <Reveal>
+            <div className="mono-label flex items-center gap-3 text-steel-500">
+              <span className="tnum text-blue-600">11</span>
+              <span className="block h-px w-9 bg-blue-600/50" aria-hidden />
+              — KAUNER
+            </div>
+          </Reveal>
+          <Reveal delay={0.06} className="mt-5">
+            <h2 className="max-w-[22ch] font-display text-h2 text-ink">
+              Tehnologie globală, prezență locală.
+            </h2>
+          </Reveal>
+          <Reveal delay={0.1} className="mt-6">
+            <p className="max-w-[76ch] text-body-l text-ink-soft">
+              Han&apos;s Laser acoperă întreg ciclul — cercetare, proiectare,
+              fabricație și service post-vânzare — cu o rețea de peste 180 de
+              birouri în 100+ țări și 30.000 de utilaje instalate global. Kauner
+              aduce această tehnologie în România cu o echipă de trei ingineri și
+              peste 15 ani de experiență în industrie: consultanță de proces,
+              punere în funcțiune, instruire și mentenanță — local, în limba ta, cu
+              timp de răspuns scurt.
+            </p>
+          </Reveal>
+
+          <div className="mt-14 grid gap-10 lg:grid-cols-2 lg:items-center">
+            <Reveal>
+              <IntegrationWheel />
+            </Reveal>
+            <div className="space-y-8">
+              <Reveal delay={0.06}>
+                <PresenceMap />
+              </Reveal>
+              <Reveal delay={0.1}>
+                <MediaPlaceholder
+                  kind="image"
+                  ratio="16 / 9"
+                  label="FOTO · echipa Kauner (3 ingineri)"
+                  alt="Echipa Kauner — ingineri debitare laser în România"
+                />
+              </Reveal>
+            </div>
+          </div>
+
+          <p className="mono-label mt-10 text-blue-600">Integrator Han&apos;s Laser în România.</p>
+        </div>
+      </section>
+
+      {/* 4.12 — STATISTICI + CTA (light) —————————————————————————————————— */}
+      <section id="statistici-cta" className="cv-section border-t border-line bg-paper">
+        <div className="container-kauner py-section-sm md:py-section">
+          <Reveal>
+            <div className="mono-label flex items-center gap-3 text-steel-500">
+              <span className="tnum text-blue-600">12</span>
+              <span className="block h-px w-9 bg-blue-600/50" aria-hidden />
+              — RECAPITULARE
+            </div>
+          </Reveal>
+
+          <div className="mt-8">
+            <StatBand
+              tone="light"
+              columnsClass="sm:grid-cols-2 lg:grid-cols-4"
+              items={
+                [
+                  { note: "PRODUCĂTOR MONDIAL", value: "#3" },
+                  { note: "PUTERE DISPONIBILĂ", value: "60", unit: "kW" },
+                  { note: "VITEZĂ POZIȚIONARE", value: "~280", unit: "m/min" },
+                  { note: "MAȘINI INSTALATE", value: "30.000+" },
+                  { note: "REȚEA GLOBALĂ", value: "", lines: ["100+ țări", "180+ birouri"] },
+                  { note: "BREVETE", value: "7.400+" },
+                  { note: "CERTIFICĂRI", value: "", lines: ["ISO 9001 · 14001", "CE · AEO"] },
+                ] as Stat[]
+              }
+            />
+          </div>
+
+          {/* CTA final */}
+          <div className="mt-20 border-t border-line pt-14">
+            <Reveal>
+              <h2 className="max-w-[16ch] font-display text-h1 text-ink">
+                Vrei să vezi ce iese?
+              </h2>
+            </Reveal>
+            <Reveal delay={0.06} className="mt-5">
+              <p className="max-w-[56ch] text-body-l text-ink-soft">
+                Trimite-ne un desen și îți tăiem o mostră reală, pe materialul tău.
+              </p>
+            </Reveal>
+            <Reveal delay={0.1} className="mt-9">
+              <div className="flex flex-wrap items-center gap-6">
+                <Button href="/contact" variant="primary" withChevron>
+                  Cere o mostră de tăiere
+                </Button>
+                <Link
+                  href="/echipamente"
+                  className="group inline-flex items-center gap-2 text-sm font-semibold text-ink outline-none transition-colors hover:text-blue-600"
+                >
+                  Vezi echipamentele
+                  <ArrowRight
+                    className="h-4 w-4 transition-transform duration-300 ease-out-engineered group-hover:translate-x-1"
+                    strokeWidth={2.25}
+                    aria-hidden
+                  />
+                </Link>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
