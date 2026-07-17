@@ -7,7 +7,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, ChevronDown, ChevronRight, Menu, X } from "lucide-react";
 import { NavLogo } from "@/components/ui/Logo";
 import { Button } from "@/components/ui/Button";
-import { Placeholder } from "@/components/ui/Placeholder";
 import { LanguageSwitch } from "@/components/ui/LanguageSwitch";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
@@ -213,9 +212,9 @@ export function Nav() {
                           onMouseEnter={() => setActiveCat(i)}
                           onFocus={() => setActiveCat(i)}
                           onClick={() => setEquipOpen(false)}
-                          className={`group/cat flex items-center justify-between gap-4 py-3 font-display-600 text-[1.05rem] transition-colors ${
+                          className={`group/cat -mx-4 flex items-center justify-between gap-4 rounded-sharp px-4 py-3 font-display-600 text-[1.05rem] transition-colors ${
                             current
-                              ? "text-ink"
+                              ? "bg-mist-100 text-kauner-blue"
                               : "text-steel-500 hover:text-ink"
                           }`}
                         >
@@ -236,37 +235,45 @@ export function Nav() {
                 </ul>
               </div>
 
-              {/* Right — preview of the active category */}
-              <Link
-                href={`${EQUIP_HREF}#${t.equipment.items[activeCat].slug}`}
-                onClick={() => setEquipOpen(false)}
-                className="group grid grid-cols-[1.1fr_1fr] items-center gap-10 outline-none"
-              >
-                <div className="overflow-hidden border border-mist-200">
-                  <Placeholder
-                    label={t.equipment.items[activeCat].label}
-                    alt={t.equipment.items[activeCat].alt}
-                    ratio="16 / 10"
-                    zoom
-                  />
-                </div>
-                <div>
-                  <h3 className="font-display-600 text-h3 text-ink">
-                    {t.equipment.items[activeCat].name}
-                  </h3>
-                  <p className="mt-4 text-[0.95rem] leading-relaxed text-steel-700">
+              {/* Right — models within the active category */}
+              <div className="min-w-0">
+                <h3 className="font-display-600 text-h4 text-ink">
+                  {t.equipment.items[activeCat].name}
+                </h3>
+
+                {t.equipment.items[activeCat].models.length > 0 ? (
+                  <ul className="mt-7 grid grid-cols-2 gap-x-10 gap-y-1 xl:grid-cols-3">
+                    {t.equipment.items[activeCat].models.map((model) => (
+                      <li key={model.slug}>
+                        <Link
+                          href={`${EQUIP_HREF}/${model.slug}`}
+                          onClick={() => setEquipOpen(false)}
+                          className="block py-2 text-[0.95rem] text-steel-400 outline-none transition-colors hover:text-ink focus-visible:text-ink"
+                        >
+                          {model.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="mt-6 max-w-md text-[0.95rem] leading-relaxed text-steel-700">
                     {t.equipment.items[activeCat].desc}
                   </p>
-                  <span className="mt-7 inline-flex items-center gap-1.5 text-sm font-semibold text-steel-500 transition-colors group-hover:text-ink">
-                    {t.equipment.learnMore}
-                    <ChevronRight
-                      className="h-4 w-4 text-kauner-blue transition-transform duration-300 ease-out-engineered group-hover:translate-x-1"
-                      strokeWidth={2.5}
-                      aria-hidden
-                    />
-                  </span>
-                </div>
-              </Link>
+                )}
+
+                <Link
+                  href={`${EQUIP_HREF}#${t.equipment.items[activeCat].slug}`}
+                  onClick={() => setEquipOpen(false)}
+                  className="group mt-8 inline-flex items-center gap-1.5 text-sm font-semibold text-steel-500 outline-none transition-colors hover:text-ink focus-visible:text-ink"
+                >
+                  {t.equipment.learnMore}
+                  <ChevronRight
+                    className="h-4 w-4 text-kauner-blue transition-transform duration-300 ease-out-engineered group-hover:translate-x-1"
+                    strokeWidth={2.5}
+                    aria-hidden
+                  />
+                </Link>
+              </div>
             </div>
           </motion.div>
         )}

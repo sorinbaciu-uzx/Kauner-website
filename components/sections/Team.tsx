@@ -47,6 +47,9 @@ export function Team() {
               {/* Name intentionally blank until real bios are provided */}
               <p className="mt-4 h-5 font-display-600 text-base text-ink" />
               <p className="mono-label mt-1 text-steel-500">{m.role}</p>
+              <p className="mt-3 text-[0.95rem] leading-relaxed text-steel-700">
+                {m.desc}
+              </p>
             </RevealItem>
           ))}
         </RevealGroup>

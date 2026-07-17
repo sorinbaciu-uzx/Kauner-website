@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { Placeholder } from "@/components/ui/Placeholder";
+import { LaserScan } from "@/components/ui/LaserScan";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/Reveal";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
@@ -27,7 +28,7 @@ export function Equipment() {
           as="ul"
           className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
         >
-          {t.equipment.items.map((p) => (
+          {t.equipment.items.map((p, i) => (
             <RevealItem as="span" key={p.name} className="block">
               <Link
                 id={p.slug}
@@ -38,12 +39,18 @@ export function Equipment() {
                   <Placeholder
                     label={p.label}
                     ratio="16 / 10"
-                    // src={`/images/equip-…jpg`}  ← drop the real photo here
+                    // Real photos drop in per card here. Sheet-cutting wired for preview.
+                    src={
+                      p.slug === "debitare-tabla"
+                        ? "/images/equip-sheet.png"
+                        : undefined
+                    }
                     alt={p.alt}
                     zoom
                   />
+                  <LaserScan delay={i * 0.5} />
                 </div>
-                <h3 className="mt-6 font-display-600 text-h3 text-ink">
+                <h3 className="mt-6 font-display-600 text-h4 text-ink">
                   {p.name}
                 </h3>
                 <p className="mt-3 flex-1 text-[0.95rem] leading-relaxed text-steel-700">

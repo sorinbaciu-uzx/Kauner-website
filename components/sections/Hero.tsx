@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
-import { PhotoFill } from "@/components/ui/PhotoFill";
+import { VideoFill } from "@/components/ui/VideoFill";
 import { reveal, stagger, easeEngineered } from "@/lib/motion";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
@@ -11,21 +11,33 @@ export function Hero() {
 
   return (
     <section className="relative flex min-h-svh flex-col overflow-hidden">
-      {/* Full-bleed laser photography (placeholder until real asset) */}
-      <PhotoFill
+      {/* Full-bleed laser video loop (placeholder until real assets).
+          Drop the clip(s) into /public/videos and uncomment below. Keep the
+          poster so the still shows instantly and for reduced-motion visitors. */}
+      <VideoFill
         label={t.hero.photoLabel}
         alt={t.hero.photoAlt}
-        priority
         labelPosition="top"
-        // src="/images/hero-laser.jpg"  ← drop the real photo here
+        poster="/images/hero-laser.jpg"
+        srcWebm="/videos/hero-laser.webm"
+        srcMp4="/videos/hero-laser.mp4"
+        // Temper the high-key clip so the bright machine can't wash out the
+        // copy as it drifts behind the headline through the loop.
+        mediaClassName="brightness-[0.62] contrast-[1.04]"
       />
-      {/* Legibility scrim: darker top (nav) and bottom (copy) */}
+      {/* Legibility scrim — two stacked layers so white copy stays readable
+          over the machine in every frame of the loop, while the clip still
+          "breathes" on the right:
+          (1) a radial wash anchored bottom-left, dark under the text column
+          and fading to clear over the machine; (2) a vertical wash for the
+          nav (top) and the capability strip (bottom). */}
       <div
         className="absolute inset-0"
         aria-hidden
         style={{
           background:
-            "linear-gradient(180deg, rgba(10,10,12,0.55) 0%, rgba(10,10,12,0.15) 30%, rgba(10,10,12,0.10) 52%, rgba(10,10,12,0.84) 100%)",
+            "radial-gradient(125% 105% at 12% 82%, rgba(10,10,12,0.86) 0%, rgba(10,10,12,0.62) 34%, rgba(10,10,12,0.30) 55%, rgba(10,10,12,0.06) 74%, rgba(10,10,12,0) 88%), " +
+            "linear-gradient(180deg, rgba(10,10,12,0.55) 0%, rgba(10,10,12,0.10) 22%, rgba(10,10,12,0.10) 58%, rgba(10,10,12,0.90) 100%)",
         }}
       />
 
@@ -71,23 +83,30 @@ export function Hero() {
         </motion.div>
       </div>
 
-      {/* Bottom capability strip — mono, hairline dividers */}
+      {/* Trust bar — a static band of its own at the foot of the hero (no
+          overlap with the copy): mono chips separated by "·", on a
+          semi-transparent surface. On mobile it scrolls horizontally. */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.6, duration: 0.6, ease: easeEngineered }}
-        className="relative z-10 border-t border-white/15"
+        className="relative z-10 border-t border-white/15 bg-ink/40 backdrop-blur-sm"
       >
         <div className="container-kauner">
-          <ul className="flex flex-wrap items-center gap-x-6 gap-y-2 py-5 md:gap-x-0">
-            {t.hero.strip.map((item, i) => (
+          <ul className="flex items-center gap-x-4 overflow-x-auto py-4 [-ms-overflow-style:none] [scrollbar-width:none] md:justify-center md:gap-x-6 [&::-webkit-scrollbar]:hidden">
+            {t.hero.trust.map((item, i) => (
               <li
                 key={item}
-                className={`mono-label text-white/55 md:flex-1 md:px-6 md:text-center ${
-                  i > 0 ? "md:border-l md:border-white/15" : ""
-                }`}
+                className="flex shrink-0 items-center gap-x-4 md:gap-x-6"
               >
-                {item}
+                {i > 0 && (
+                  <span aria-hidden className="text-white/25">
+                    ·
+                  </span>
+                )}
+                <span className="mono-label whitespace-nowrap text-white/70">
+                  {item}
+                </span>
               </li>
             ))}
           </ul>

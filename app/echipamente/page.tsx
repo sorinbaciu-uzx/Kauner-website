@@ -1,14 +1,10 @@
 import type { Metadata } from "next";
-import { Equipment } from "@/components/sections/Equipment";
+import { EquipmentCatalog } from "@/components/sections/EquipmentCatalog";
 
 export const metadata: Metadata = {
   title: "Echipamente",
 };
 
 export default function EchipamentePage() {
-  return (
-    <div className="pt-[72px]">
-      <Equipment />
-    </div>
-  );
+  return <EquipmentCatalog />;
 }
