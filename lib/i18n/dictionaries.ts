@@ -14,74 +14,525 @@
 // Each category is defined ONCE as {slug, ro, en}; `models(list, locale)`
 // derives the per-language {slug, name}[] the dictionaries expose. Defining the
 // slug in a single place guarantees RO and EN can never drift to different URLs.
-type ModelSource = { slug: string; ro: string; en: string };
-type Model = { slug: string; name: string };
+type ModelSource = {
+  slug: string;
+  ro: string;
+  en: string;
+  descRo?: string[];
+  descEn?: string[];
+};
+type Model = { slug: string; name: string; desc?: string[] };
 
 const models = (list: ModelSource[], locale: "ro" | "en"): Model[] =>
-  list.map((m) => ({ slug: m.slug, name: locale === "ro" ? m.ro : m.en }));
+  list.map((m) => {
+    // Per-model product blurb, rendered per card in the catalogue. Falls back to
+    // the category description when a model has none.
+    const desc = locale === "ro" ? m.descRo : m.descEn;
+    return {
+      slug: m.slug,
+      name: locale === "ro" ? m.ro : m.en,
+      ...(desc ? { desc } : {}),
+    };
+  });
 
 const SHEET_CUTTING: ModelSource[] = [
-  { slug: "hf-expert", ro: "HF Expert", en: "HF Expert" },
-  { slug: "hf-s-smart", ro: "HF S Smart", en: "HF S Smart" },
-  { slug: "hf-s-standard", ro: "HF S Standard", en: "HF S Standard" },
-  { slug: "mini-s", ro: "MINI S", en: "MINI S" },
-  { slug: "hf-mini", ro: "HF Mini", en: "HF Mini" },
-  { slug: "hf-series", ro: "Seria HF", en: "HF Series" },
-  { slug: "g-f-series", ro: "Seria G-F", en: "G-F Series" },
-  { slug: "g-o-series", ro: "Seria G-O", en: "G-O Series" },
-  { slug: "g3015-o-pro", ro: "G3015-O PRO", en: "G3015-O PRO" },
-  { slug: "g-j-series", ro: "Seria G-J", en: "G-J Series" },
-  { slug: "mps-d3", ro: "MPS-D3", en: "MPS-D3" },
-  { slug: "mps-c3", ro: "MPS-C3", en: "MPS-C3" },
-  { slug: "mps-c3-pro", ro: "MPS-C3 PRO", en: "MPS-C3 PRO" },
-  { slug: "hf-50-series", ro: "Seria HF 50", en: "HF 50 Series" },
-  { slug: "giant-l-lb-hl-hlb", ro: "GIANT-L/LB/HL/HLB", en: "GIANT-L/LB/HL/HLB" },
-  { slug: "s-pro-a-g", ro: "S PRO- A/G", en: "S PRO- A/G" },
-  { slug: "grc-series", ro: "Seria GRC", en: "GRC Series" },
+  {
+    slug: "hf-expert",
+    ro: "HF Expert",
+    en: "HF Expert",
+    descRo: [
+      "Mașină de debitare laser de mare productivitate",
+      "3015 / 4020 / 6025 / 8025",
+      "Putere disponibilă: 6kW / 12kW / 20kW / 30kW / 40kW / ...",
+    ],
+    descEn: [
+      "High-productivity Laser Cutting Machine",
+      "3015 / 4020 / 6025 / 8025",
+      "Available power: 6kW / 12kW / 20kW / 30kW / 40kW / ...",
+    ],
+  },
+  {
+    slug: "hf-s-smart",
+    ro: "HF S Smart",
+    en: "HF S Smart",
+    descRo: [
+      "Mașină de debitare laser de mare productivitate",
+      "3015 / 4020 / 6020 / 6025 / 8025 / 12025",
+      "Putere disponibilă: 6kW / 12kW / 20kW / 30kW / 40kW",
+    ],
+    descEn: [
+      "High-productivity Laser Cutting Machine",
+      "3015 / 4020 / 6020 / 6025 / 8025 / 12025",
+      "Available power: 6kW / 12kW / 20kW / 30kW / 40kW",
+    ],
+  },
+  {
+    slug: "hf-s-standard",
+    ro: "HF S Standard",
+    en: "HF S Standard",
+    descRo: [
+      "Mașină de debitare laser de mare productivitate",
+      "3015 / 4020 / 6020 / 6025 / 8025 / 12025",
+      "Putere disponibilă: 6kW / 12kW / 20kW / 30kW / 40kW",
+    ],
+    descEn: [
+      "High-productivity Laser Cutting Machine",
+      "3015 / 4020 / 6020 / 6025 / 8025 / 12025",
+      "Available power: 6kW / 12kW / 20kW / 30kW / 40kW",
+    ],
+  },
+  {
+    slug: "mini-s",
+    ro: "MINI S",
+    en: "MINI S",
+    descRo: [
+      "Unealtă de debitare laser inteligentă",
+      "Mașină de debitare laser accesibilă, pentru segmentul entry-level...",
+    ],
+    descEn: [
+      "Smart Laser Cutting Tool",
+      "Cost-effective Laser Cutting Machine for Entry-level Machine...",
+    ],
+  },
+  {
+    slug: "hf-mini",
+    ro: "HF Mini",
+    en: "HF Mini",
+    descRo: [
+      "Mașină de debitare laser accesibilă ca preț",
+      "3015 / 4020",
+      "Putere disponibilă: 6kW / 12kW / 20kW / 30kW / 40kW",
+    ],
+    descEn: [
+      "Cost-effective Laser Cutting Machine",
+      "3015 / 4020",
+      "Available Power: 6kW / 12kW / 20kW / 30kW / 40kW",
+    ],
+  },
+  {
+    slug: "hf-series",
+    ro: "Seria HF",
+    en: "HF Series",
+    descRo: [
+      "Mașină de debitare laser de mare viteză",
+      "3015 / 4020 / 6025 / 8025 / 10025 / 12025 / 12030",
+      "Putere disponibilă: 6kW / 12kW / 20kW / 30kW / 40kW / ...",
+    ],
+    descEn: [
+      "High-speed Laser Cutting Machine",
+      "3015 / 4020 / 6025 / 8025 / 10025 / 12025 / 12030",
+      "Available power: 6kW / 12kW / 20kW / 30kW / 40kW / ...",
+    ],
+  },
+  {
+    slug: "g-f-series",
+    ro: "Seria G-F",
+    en: "G-F Series",
+    descRo: [
+      "Mașină de debitare laser de mare precizie",
+      "Putere disponibilă: 3kW-60kW",
+      "Format disponibil: 3-12 metri",
+    ],
+    descEn: [
+      "High-precision Laser Cutting Machine",
+      "Available power: 3kW-60kW",
+      "Available format:3-12meters",
+    ],
+  },
+  {
+    slug: "g-o-series",
+    ro: "Seria G-O",
+    en: "G-O Series",
+    descRo: [
+      "Mașină de debitare laser pentru metal",
+      "Putere disponibilă: 3kW-20kW",
+      "•Design compact •Structură sigură și fiabilă...",
+    ],
+    descEn: [
+      "Metal Laser Cutting Machine",
+      "Available Power: 3kW-20kW",
+      "•Compact Design •Safe and Reliable Structure...",
+    ],
+  },
+  {
+    slug: "g3015-o-pro",
+    ro: "G3015-O PRO",
+    en: "G3015-O PRO",
+    descRo: [
+      "Mașină de debitare laser cu fibră, cu platformă unică",
+      "Complet carenată / opțiuni de carenare tip gantry disponibile",
+      "Putere laser disponibilă: 3kW-20kW",
+    ],
+    descEn: [
+      "Single Platform Fiber Laser Cutting Machine",
+      "Fully-Enclosed / Gantry Cover Options Available",
+      "Available Laser Power: 3kW-20kW",
+    ],
+  },
+  {
+    slug: "g-j-series",
+    ro: "Seria G-J",
+    en: "G-J Series",
+    descRo: [
+      "Costuri reduse, eficiență maximă",
+      "Format disponibil: 3-12 metri",
+      "Putere disponibilă: 2kW-20kW",
+    ],
+    descEn: [
+      "Cutting Costs, Maximizing Efficiency",
+      "Available Format:3-12meters",
+      "Available Power:2kW-20kW",
+    ],
+  },
+  {
+    slug: "mps-d3",
+    ro: "MPS-D3",
+    en: "MPS-D3",
+    descRo: [
+      "Mașină de debitare laser cu fibră, tip deschis, cu platformă unică",
+      "...",
+    ],
+    descEn: [
+      "Open-type Fiber Laser Cutting Machine with Single Platform",
+      "...",
+    ],
+  },
+  {
+    slug: "mps-c3",
+    ro: "MPS-C3",
+    en: "MPS-C3",
+    descRo: [
+      "Mașină de debitare laser accesibilă, pentru tablă subțire și medie",
+      "Mașina completă încape într-un container 40HQ...",
+    ],
+    descEn: [
+      "Cost-effectiveness Laser Cutting Machine for Medium & Thin Sheet Metal",
+      "Whole Machine Loaded into 40HQ Container...",
+    ],
+  },
+  {
+    slug: "mps-c3-pro",
+    ro: "MPS-C3 PRO",
+    en: "MPS-C3 PRO",
+    descRo: [
+      "Mașină de debitare laser de mare viteză, pentru tablă subțire și medie",
+      "Mașina completă încape într-un container 40HQ...",
+    ],
+    descEn: [
+      "High-speed Laser Cutting Machine for Medium & Thin Sheet Metal",
+      "Whole Machine Loaded into 40HQ Container...",
+    ],
+  },
+  {
+    slug: "hf-50-series",
+    ro: "Seria HF 50",
+    en: "HF 50 Series",
+    descRo: [
+      "Mașină de debitare laser de nivel superior",
+      "3015 / 4020 / 4025",
+      "Putere disponibilă: 6kW / 12kW / 20kW / 30kW / 40kW / ...",
+    ],
+    descEn: [
+      "High-end Laser Cutting Machine",
+      "3015 / 4020 / 4025",
+      "Available power: 6kW / 12kW / 20kW / 30kW / 40kW / ...",
+    ],
+  },
+  {
+    slug: "giant-l-lb-hl-hlb",
+    ro: "GIANT-L/LB/HL/HLB",
+    en: "GIANT-L/LB/HL/HLB",
+    descRo: [
+      "Mașină de debitare laser în format ultra-mare",
+      "Zonă de lucru personalizată: lungime 110m+, lățime 7m+...",
+    ],
+    descEn: [
+      "Ultra-Large Format Laser Cutting Machine",
+      "Customized work area: Length 110m+, Width 7m+...",
+    ],
+  },
+  {
+    slug: "s-pro-a-g",
+    ro: "S PRO- A/G",
+    en: "S PRO- A/G",
+    descRo: [
+      "Mașină de debitare laser în format mare, cu ghidaje liniare",
+      "6025 / 8025 / 13025 / 26025 / 30025",
+      "Putere disponibilă: 12kW / 20kW / 30kW / 40kW / 60kW",
+    ],
+    descEn: [
+      "Linear Rail Large Format Laser Cutting Machine",
+      "6025 / 8025 / 13025 / 26025 / 30025",
+      "Available power: 12kW / 20kW / 30kW / 40kW / 60kW",
+    ],
+  },
+  {
+    slug: "grc-series",
+    ro: "Seria GRC",
+    en: "GRC Series",
+    descRo: [
+      "Sistem de debitare laser alimentat din rulou (coil)",
+      "● Debitare rapidă sincronă cu unul/mai multe capete;",
+      "● Debitare în linie asincronă cu două capete;...",
+    ],
+    descEn: [
+      "Coil-fed Laser Cutting System",
+      "● Single/multi-head synchronous fast cutting;",
+      "● Double-head asynchronous in-line cutting;...",
+    ],
+  },
 ];
 
 const TUBE_CUTTING: ModelSource[] = [
-  { slug: "tx-series", ro: "Seria TX", en: "TX Series" },
-  { slug: "pd-series", ro: "Seria PD", en: "PD Series" },
-  { slug: "plt-series", ro: "Seria PLT", en: "PLT Series" },
+  {
+    slug: "tx-series",
+    ro: "Seria TX",
+    en: "TX Series",
+    descRo: [
+      "Mașină de debitare laser cu fibră pentru țevi, de mare capacitate",
+      "Tehnologie de procesare a țevilor de mare capacitate, cu încărcare...",
+    ],
+    descEn: [
+      "Heavy-duty Fiber Laser Tube Cutting Machine",
+      "Heavy-duty tube processing technology with load...",
+    ],
+  },
+  {
+    slug: "pd-series",
+    ro: "Seria PD",
+    en: "PD Series",
+    descRo: [
+      "Mașină de debitare laser pentru țevi",
+      "Specializată pentru țevi de dimensiuni mici și medii",
+      "Lungime: 6-12 metri  Dimensiune: 10-260MM",
+    ],
+    descEn: [
+      "Tube Laser Cutting Machine",
+      "Expert For Small and Medium Size Tube",
+      "Length: 6-12Meters Size: 10-260MM",
+    ],
+  },
+  {
+    slug: "plt-series",
+    ro: "Seria PLT",
+    en: "PLT Series",
+    descRo: [
+      "Mașină profesională de debitare laser cu fibră pentru țevi",
+      "Design modular pentru configurații flexibile...",
+    ],
+    descEn: [
+      "Professional Fiber Laser Tube Cutting Machine",
+      "Modular Design for Flexible Configurations...",
+    ],
+  },
   {
     slug: "h-beam-laser-cutter",
     ro: "Laser pentru profile H",
     en: "H Beam laser cutter",
+    descRo: [
+      "H12560BF / LBF",
+      "Interval de debitare:  profil H 1250mm × 600mm",
+      "Putere disponibilă: 6kW / 12kW / 20kW / 30kW / 40kW / ...",
+    ],
+    descEn: [
+      "H12560BF / LBF",
+      "Cutting range:  H Beam 1250mm × 600mm",
+      "Available power: 6kW / 12kW / 20kW / 30kW / 40kW / ...",
+    ],
   },
-  { slug: "mps-t5", ro: "MPS-T5", en: "MPS-T5" },
-  { slug: "td-series", ro: "Seria TD", en: "TD Series" },
+  {
+    slug: "mps-t5",
+    ro: "MPS-T5",
+    en: "MPS-T5",
+    descRo: [
+      "Putere disponibilă: 1500W-6000kW (opțional)",
+      "Tip model: încărcare semi-automată, încărcare complet automată etc.",
+    ],
+    descEn: [
+      "Available power: 1500W-6000kW(Optional)",
+      "Model Type: semi-automatic loading, fully automatic loading etc.",
+    ],
+  },
+  {
+    slug: "td-series",
+    ro: "Seria TD",
+    en: "TD Series",
+    descRo: [
+      "Design la standard global / surse laser IPG & Han's / capabilitate multi-material",
+      "T6016D / T6022D / T10025D / T6033D / T12033D / ...",
+    ],
+    descEn: [
+      "Global-Standard Design/IPG &Han's laser sources/Multi-Material Capability",
+      "T6016D / T6022D / T10025D / T6033D / T12033D / ...",
+    ],
+  },
 ];
 
 const CUTTING_3D: ModelSource[] = [
-  { slug: "wd-series", ro: "Seria WD", en: "WD Series" },
+  {
+    slug: "wd-series",
+    ro: "Seria WD",
+    en: "WD Series",
+    descRo: [
+      "Mașină de debitare laser 3D în 5 axe, de mare productivitate",
+      "3015 / 3122 / 4025",
+      "Putere disponibilă: 3000W / 4000W / 6000W",
+    ],
+    descEn: [
+      "High-productivity 3D 5-axis Laser Cutting Machine",
+      "3015 / 3122 / 4025",
+      "Available power: 3000W / 4000W / 6000W",
+    ],
+  },
 ];
 
 const BENDING: ModelSource[] = [
-  { slug: "hbs-series", ro: "Seria HBS", en: "HBS Series" },
+  {
+    slug: "hbs-series",
+    ro: "Seria HBS",
+    en: "HBS Series",
+    descRo: [
+      "Mașină de îndoit CNC servo, de înaltă performanță",
+      "Alegere variată a configurației mașinii, multiple...",
+    ],
+    descEn: [
+      "High Performance CNC Servo Bending Machine",
+      "Various choice of machine configuration, Multiple...",
+    ],
+  },
   {
     slug: "bending-automation-cell",
     ro: "Celulă automată de îndoire",
     en: "Bending Automation Cell",
+    descRo: [
+      "Producție neîntreruptă 24/7 pentru a reduce munca manuală;",
+      "Ideală pentru piese din tablă în serie mare, cu cerințe ridicate...",
+    ],
+    descEn: [
+      "24/7 uninterrupted production to cut manual workload;",
+      "Ideal for mass sheet metal parts demanding high...",
+    ],
   },
-  { slug: "hbi-series", ro: "Seria HBI", en: "HBI Series" },
-  { slug: "hbe-series", ro: "Seria HBE", en: "HBE Series" },
-  { slug: "hbd-series", ro: "Seria HBD", en: "HBD Series" },
+  {
+    slug: "hbi-series",
+    ro: "Seria HBI",
+    en: "HBI Series",
+    descRo: [
+      "Centru de îndoire pe mai multe laturi",
+      "Poziționare unică pentru muchii și treceri multiple...",
+    ],
+    descEn: [
+      "Multi-Sided Bending Center",
+      "Single positioning for multi-edge, multi-pass...",
+    ],
+  },
+  {
+    slug: "hbe-series",
+    ro: "Seria HBE",
+    en: "HBE Series",
+    descRo: [
+      "Presă abkant CNC servo, complet electrică",
+      "Folosește servomotoare pentru forța de îndoire...",
+    ],
+    descEn: [
+      "All-electric Servo CNC Press Brake",
+      "Adopting servo motors as bending power for...",
+    ],
+  },
+  {
+    slug: "hbd-series",
+    ro: "Seria HBD",
+    en: "HBD Series",
+    descRo: [
+      "Mașină de îndoit CNC hibridă, cu servo dublu",
+      "Precizie, eficiență și inteligență avansate.",
+    ],
+    descEn: [
+      "Dual Servo Hybrid CNC Bending Machine",
+      "Advanced Precision, Efficiency, and Intelligence.",
+    ],
+  },
 ];
 
 const WELDING: ModelSource[] = [
-  { slug: "mps-hw-series", ro: "Seria MPS-HW", en: "MPS-HW Series" },
-  { slug: "dzw-pro-series", ro: "Seria DZW PRO", en: "DZW PRO Series" },
-  { slug: "w-series", ro: "Seria W", en: "W Series" },
+  {
+    slug: "mps-hw-series",
+    ro: "Seria MPS-HW",
+    en: "MPS-HW Series",
+    descRo: [
+      "Viteză mare de sudare / cost redus",
+      "1000W-2000W opțional",
+    ],
+    descEn: [
+      "Fast Welding Speed/Save Cost",
+      "1000W-2000W Optional",
+    ],
+  },
+  {
+    slug: "dzw-pro-series",
+    ro: "Seria DZW PRO",
+    en: "DZW PRO Series",
+    descRo: [
+      "Mașină de sudură laser portabilă",
+      "Siguranță în operare, cu calitate perfectă a sudurii...",
+    ],
+    descEn: [
+      "Handheld Laser Welding machine",
+      "Operational security with Perfect welding quality...",
+    ],
+  },
+  {
+    slug: "w-series",
+    ro: "Seria W",
+    en: "W Series",
+    descRo: [
+      "Mașină de sudură laser portabilă",
+      "răcire cu apă: HW1500W / răcire cu apă HW2000W",
+      "răcire cu aer: HW1500WF-IPG / HW1500-HL",
+    ],
+    descEn: [
+      "Hand-held laser welding machine",
+      "hydrocooling: HW1500W/ hydrocooling HW2000W",
+      "Air cooling: HW1500WF-IPG/ HW1500-HL",
+    ],
+  },
 ];
 
 const AUTOMATION: ModelSource[] = [
-  { slug: "sl-series", ro: "Seria SL", en: "SL Series" },
-  { slug: "slu-series", ro: "Seria SLU", en: "SLU Series" },
+  {
+    slug: "sl-series",
+    ro: "Seria SL",
+    en: "SL Series",
+    descRo: [
+      "Proces semi-automat / economii de manoperă și cost / control intuitiv / sistem CNC integrat",
+    ],
+    descEn: [
+      "Semi-automated Process /Labor & Cost Savings/User-friendly Control/Integrated CNC System",
+    ],
+  },
+  {
+    slug: "slu-series",
+    ro: "Seria SLU",
+    en: "SLU Series",
+    descRo: [
+      "Eficiență ridicată / automatizare pe tot procesul / economii de manoperă / control comod",
+    ],
+    descEn: [
+      "High Efficiency /Full-process Automation /Labor Savings /Convenient Control",
+    ],
+  },
   {
     slug: "alu-series",
     ro: "Soluție de automatizare laser Seria ALU",
     en: "ALU Series Laser Automation Solution",
+    descRo: [
+      "Producție maxim „fără operator”, cu manoperă redusă;",
+      "Sistem inteligent de control FMS; sistem de control profund integrat, auto-diagnoză pentru mentenanță mai bună;...",
+    ],
+    descEn: [
+      'Maximally "unmanned" production, lower man power;',
+      "FMS smart control system; Deeply engaged control system, Self-diagnosis for better maintenance ;...",
+    ],
   },
 ];
 

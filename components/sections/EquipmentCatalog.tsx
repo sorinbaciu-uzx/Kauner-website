@@ -163,11 +163,11 @@ export function EquipmentCatalog() {
                     href={`/echipamente/${model.slug}`}
                     className="group flex flex-col gap-6 border border-mist-200 bg-mist-100 p-5 outline-none transition-colors duration-300 hover:border-kauner-blue focus-visible:border-kauner-blue sm:flex-row sm:items-center sm:gap-8 sm:p-6"
                   >
-                    <div className="w-full overflow-hidden border border-mist-200 bg-white sm:w-[34%] md:w-[30%]">
+                    <div className="w-full overflow-hidden border border-mist-200 bg-white sm:w-[46%]">
                       <Placeholder
                         label={model.name}
                         alt={`${model.name} — ${cat.name}`}
-                        ratio="16 / 10"
+                        ratio="5 / 2"
                         zoom
                       />
                     </div>
@@ -175,9 +175,13 @@ export function EquipmentCatalog() {
                       <h3 className="font-display-600 text-h4 text-ink">
                         {model.name}
                       </h3>
-                      <p className="mt-3 max-w-xl text-[0.95rem] leading-relaxed text-steel-700">
-                        {cat.desc}
-                      </p>
+                      {/* Per-model blurb copied from the product sheet; falls back
+                          to the category description for models without one. */}
+                      <div className="mt-3 max-w-xl text-[0.95rem] leading-relaxed text-steel-700">
+                        {(model.desc ?? [cat.desc]).map((line, li) => (
+                          <p key={li}>{line}</p>
+                        ))}
+                      </div>
                       <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-steel-500 transition-colors group-hover:text-ink">
                         {t.equipment.learnMore}
                         <ChevronRight
